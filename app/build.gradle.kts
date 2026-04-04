@@ -22,4 +22,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Core
+    implementation(project(":core:common"))
+    implementation(project(":core:database:impl"))
+    implementation(project(":core:ui"))
+
+    // Features
+    implementation(project(":feature:dashboard:impl"))
+    implementation(project(":feature:assets:impl"))
+    implementation(project(":feature:liabilities:impl"))
+    implementation(project(":feature:settings:impl"))
 }
