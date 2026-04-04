@@ -1,0 +1,11 @@
+plugins {
+    id("networthcalculator.android.library")
+}
+
+android {
+    namespace = "com.rosenstefanov.networthcalculator.core.database.api"
+}
+
+dependencies {
+    implementation(project(":core:common"))
+}
