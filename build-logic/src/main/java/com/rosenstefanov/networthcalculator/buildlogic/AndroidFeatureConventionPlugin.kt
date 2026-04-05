@@ -13,6 +13,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             pluginManager.apply(AndroidLibraryComposeConventionPlugin::class.java)
             pluginManager.apply("com.google.dagger.hilt.android")
             pluginManager.apply("com.google.devtools.ksp")
+            pluginManager.apply("org.jetbrains.kotlin.plugin.serialization")
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
@@ -23,6 +24,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("hilt.android").get())
                 add("ksp", libs.findLibrary("hilt.compiler").get())
                 add("implementation", libs.findLibrary("hilt-navigation-compose").get())
+                add("implementation", libs.findLibrary("kotlinx.serialization.json").get())
             }
         }
     }
