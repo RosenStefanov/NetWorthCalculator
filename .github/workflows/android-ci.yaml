@@ -94,12 +94,26 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
 
+      - name: Generate Coverage Reports
+        if: always()
+        run: ./gradlew jacocoFullReport
+
+      - name: Verify Coverage Thresholds
+        run: ./gradlew jacocoCoverageVerification
+
       - name: Upload Test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: "**/build/reports/tests/"
+
+      - name: Upload Coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: "**/build/reports/jacoco/"
 
   build:
     name: Build

@@ -25,6 +25,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("ksp", libs.findLibrary("hilt.compiler").get())
                 add("implementation", libs.findLibrary("hilt-navigation-compose").get())
                 add("implementation", libs.findLibrary("kotlinx.serialization.json").get())
+                add("androidTestImplementation", libs.findLibrary("hilt.android.testing").get())
             }
         }
     }

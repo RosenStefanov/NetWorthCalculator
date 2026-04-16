@@ -10,6 +10,7 @@ dependencies {
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.serialization.gradlePlugin)
+    compileOnly(libs.androidJunit5.gradlePlugin)
 }
 
 gradlePlugin {
@@ -33,6 +34,10 @@ gradlePlugin {
         register("kotlinAndroid") {
             id = "networthcalculator.kotlin.android"
             implementationClass = "com.rosenstefanov.networthcalculator.buildlogic.KotlinAndroidConventionPlugin"
+        }
+        register("jacoco") {
+            id = "networthcalculator.jacoco"
+            implementationClass = "com.rosenstefanov.networthcalculator.buildlogic.JacocoConventionPlugin"
         }
     }
 }

@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.paparazzi) apply false
+    alias(libs.plugins.android.junit5) apply false
 }
 
 detekt {
@@ -59,5 +61,19 @@ tasks.register<Copy>("installGitHook") {
             read = true
             execute = true
         }
+    }
+}
+
+gradle.projectsEvaluated {
+    tasks.register("jacocoFullReport") {
+        description = "Runs all module JaCoCo reports"
+        group = "verification"
+        dependsOn(subprojects.mapNotNull { it.tasks.findByName("jacocoTestReport") })
+    }
+
+    tasks.register("jacocoCoverageVerification") {
+        description = "Runs all module JaCoCo coverage verification"
+        group = "verification"
+        dependsOn(subprojects.mapNotNull { it.tasks.findByName("jacocoTestCoverageVerification") })
     }
 }
