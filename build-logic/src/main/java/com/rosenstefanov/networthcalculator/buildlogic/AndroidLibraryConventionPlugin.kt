@@ -39,6 +39,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             }
 
             pluginManager.apply(KotlinAndroidConventionPlugin::class.java)
+            pluginManager.apply("de.mannodermaus.android-junit5")
+            pluginManager.apply(JacocoConventionPlugin::class.java)
         }
     }
 }

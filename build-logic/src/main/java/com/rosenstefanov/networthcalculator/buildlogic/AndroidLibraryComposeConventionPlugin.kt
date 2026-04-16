@@ -25,6 +25,8 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
                 add("androidTestImplementation", platform(libs.findLibrary("compose.bom").get()))
                 add("debugImplementation", libs.findLibrary("compose.ui.tooling").get())
                 add("implementation", libs.findLibrary("compose.ui.tooling.preview").get())
+                add("androidTestImplementation", libs.findLibrary("compose.ui.test.junit4").get())
+                add("debugImplementation", libs.findLibrary("compose.ui.test.manifest").get())
             }
         }
     }
