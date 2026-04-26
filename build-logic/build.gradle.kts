@@ -11,6 +11,7 @@ dependencies {
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.serialization.gradlePlugin)
     compileOnly(libs.androidJunit5.gradlePlugin)
+    compileOnly(libs.roborazzi.gradlePlugin)
 }
 
 gradlePlugin {
@@ -38,6 +39,10 @@ gradlePlugin {
         register("jacoco") {
             id = "networthcalculator.jacoco"
             implementationClass = "com.rosenstefanov.networthcalculator.buildlogic.JacocoConventionPlugin"
+        }
+        register("roborazzi") {
+            id = "networthcalculator.roborazzi"
+            implementationClass = "com.rosenstefanov.networthcalculator.buildlogic.RoborazziConventionPlugin"
         }
     }
 }

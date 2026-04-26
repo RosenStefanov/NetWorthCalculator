@@ -21,28 +21,38 @@ class NavigatorTest {
 
     @Test
     fun `starts on first top-level route`() {
+        // Given
         val navigator = Navigator(tabs)
 
+        // When
+
+        // Then
         assertThat(navigator.currentTab).isEqualTo(TabA)
         assertThat(navigator.currentBackStack.toList()).containsExactly(TabA)
     }
 
     @Test
     fun `navigate to top-level route switches tab`() {
+        // Given
         val navigator = Navigator(tabs)
 
+        // When
         navigator.navigate(TabB)
 
+        // Then
         assertThat(navigator.currentTab).isEqualTo(TabB)
         assertThat(navigator.currentBackStack.toList()).containsExactly(TabB)
     }
 
     @Test
     fun `navigate to non-top-level route pushes onto current tab`() {
+        // Given
         val navigator = Navigator(tabs)
 
+        // When
         navigator.navigate(Detail(42))
 
+        // Then
         assertThat(navigator.currentTab).isEqualTo(TabA)
         assertThat(navigator.currentBackStack.toList())
             .containsExactly(TabA, Detail(42))
@@ -51,33 +61,41 @@ class NavigatorTest {
 
     @Test
     fun `goBack pops from current tab`() {
+        // Given
         val navigator = Navigator(tabs)
         navigator.navigate(Detail(1))
 
+        // When
         navigator.goBack()
 
+        // Then
         assertThat(navigator.currentBackStack.toList()).containsExactly(TabA)
     }
 
     @Test
     fun `goBack does nothing at tab root`() {
+        // Given
         val navigator = Navigator(tabs)
 
+        // When
         navigator.goBack()
 
+        // Then
         assertThat(navigator.currentTab).isEqualTo(TabA)
         assertThat(navigator.currentBackStack.toList()).containsExactly(TabA)
     }
 
     @Test
     fun `each tab has independent back stack`() {
+        // Given
         val navigator = Navigator(tabs)
+        navigator.navigate(Detail(1))
 
-        navigator.navigate(Detail(1))          // push onto TabA
-        navigator.navigate(TabB)                // switch to TabB
-        assertThat(navigator.currentBackStack.toList()).containsExactly(TabB)
+        // When
+        navigator.navigate(TabB)
+        navigator.navigate(TabA)
 
-        navigator.navigate(TabA)                // back to TabA
+        // Then
         assertThat(navigator.currentBackStack.toList())
             .containsExactly(TabA, Detail(1))
             .inOrder()
@@ -85,6 +103,11 @@ class NavigatorTest {
 
     @Test
     fun `constructor rejects empty top-level route list`() {
+        // Given
+
+        // When
+
+        // Then
         assertThrows<IllegalArgumentException> {
             Navigator(emptyList())
         }

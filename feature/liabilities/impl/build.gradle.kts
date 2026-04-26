@@ -1,5 +1,6 @@
 plugins {
     id("networthcalculator.android.feature")
+    id("networthcalculator.roborazzi")
 }
 
 android {

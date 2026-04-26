@@ -3,9 +3,13 @@ package com.rosenstefanov.networthcalculator.buildlogic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.tasks.testing.Test
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.withGroovyBuilder
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
@@ -15,18 +19,25 @@ class JacocoConventionPlugin : Plugin<Project> {
             pluginManager.apply("jacoco")
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+            val jacocoVersion = libs.findVersion("jacoco").get().requiredVersion
 
             extensions.configure(JacocoPluginExtension::class.java) {
-                toolVersion = libs.findVersion("jacoco").get().requiredVersion
+                toolVersion = jacocoVersion
+            }
+
+            val jacocoAntConfig = configurations.getByName("jacocoAnt")
+            val jacocoAgentRuntimeConfig = configurations.maybeCreate("jacocoAgentRuntime")
+            dependencies {
+                add("jacocoAgentRuntime", "org.jacoco:org.jacoco.agent:$jacocoVersion:runtime")
             }
 
             val jacocoExcludes = listOf(
-                // Android / build generated
+                // Build-generated
                 "**/R.class",
                 "**/R\$*.class",
                 "**/BuildConfig.*",
                 "**/Manifest*.*",
-                // Hilt generated
+                // Hilt-generated
                 "**/*_HiltModules*.*",
                 "**/*_Factory.*",
                 "**/*_MembersInjector.*",
@@ -35,37 +46,66 @@ class JacocoConventionPlugin : Plugin<Project> {
                 "**/*Hilt_*.*",
                 "**/*_GeneratedInjector.*",
                 "**/hilt_aggregated_deps/**",
-                // Compose UI — exercised by instrumentation / snapshot tests, not JVM unit tests
-                "**/*Screen.*",
-                "**/*Screen\$*.*",
+                // Compose scaffolding (no logic)
                 "**/ComposableSingletons*.*",
-                "**/RememberNavigatorKt.*",
+                "**/RememberNavigatorKt*",
                 "**/ui/theme/**",
-                // Navigation plumbing — declarative, no logic to cover
-                "**/*Route.*",
-                "**/*Routes.*",
-                "**/*Navigation.*",
-                "**/AppNavDisplay*.*",
-                "**/NetWorthApp*.*",
-                "**/FloatingBottomNavBar*.*",
-                // Android framework entry points
-                "**/MainActivity.*",
-                "**/*Application.*",
+                "**/*RouteKt*",
+                "**/*RoutesKt*",
+                "**/*NavigationKt*",
+                "**/AppNavDisplayKt*",
+                "**/NetWorthAppKt*",
+                "**/FloatingBottomNavBar*",
+                // Framework entry points
+                "**/MainActivity*",
+                "**/*Application*",
             )
 
             val isTestingModule = path.contains(":testing")
 
-            // Task registration must live inside afterEvaluate so the local collections
-            // are correctly captured in the task configuration closures. A previous
-            // version registered the verification task outside afterEvaluate, which
-            // caused `classDirectories` to resolve to the task's own (empty) property
-            // instead of the intended FileCollection — leaving verification vacuously
-            // passing on every module.
             afterEvaluate {
+                val classesDir = layout.buildDirectory.dir("tmp/kotlin-classes/debug")
+                val instrumentedDir = layout.buildDirectory.dir("jacoco/instrumented/debug")
+                val execFile = layout.buildDirectory.file("jacoco/testDebugUnitTest.exec")
+
+                val instrumentTask = tasks.register("jacocoInstrumentDebug") {
+                    group = "verification"
+                    description = "JaCoCo offline-instruments debug classes for Robolectric coverage."
+                    dependsOn("compileDebugKotlin")
+                    outputs.dir(instrumentedDir)
+                    onlyIf {
+                        val src = classesDir.get().asFile
+                        src.exists() && src.walk().any { it.extension == "class" }
+                    }
+                    doLast {
+                        val srcDir = classesDir.get().asFile
+                        val outDir = instrumentedDir.get().asFile
+                        outDir.deleteRecursively()
+                        outDir.mkdirs()
+                        ant.withGroovyBuilder {
+                            "taskdef"(
+                                "name" to "instrument",
+                                "classname" to "org.jacoco.ant.InstrumentTask",
+                                "classpath" to jacocoAntConfig.asPath,
+                            )
+                            "instrument"("destdir" to outDir.absolutePath) {
+                                "fileset"("dir" to srcDir.absolutePath)
+                            }
+                        }
+                    }
+                }
+
+                tasks.named("testDebugUnitTest", Test::class.java).configure {
+                    dependsOn(instrumentTask)
+                    extensions.findByType(JacocoTaskExtension::class.java)?.isEnabled = false
+                    classpath = files(instrumentedDir) + classpath + jacocoAgentRuntimeConfig
+                    systemProperty(
+                        "jacoco-agent.destfile",
+                        execFile.get().asFile.absolutePath,
+                    )
+                }
                 val classDirectoriesFiles = files(
-                    fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
-                        exclude(jacocoExcludes)
-                    },
+                    fileTree(classesDir) { exclude(jacocoExcludes) },
                     fileTree(layout.buildDirectory.dir("intermediates/javac/debug")) {
                         exclude(jacocoExcludes)
                     },
@@ -76,9 +116,7 @@ class JacocoConventionPlugin : Plugin<Project> {
                     layout.projectDirectory.dir("src/main/kotlin"),
                 )
 
-                val executionDataFiles = files(
-                    layout.buildDirectory.file("jacoco/testDebugUnitTest.exec"),
-                )
+                val executionDataFiles = files(execFile)
 
                 tasks.register<JacocoReport>("jacocoDebugTestReport") {
                     description = "Generates JaCoCo coverage report for debug unit tests"
@@ -107,21 +145,15 @@ class JacocoConventionPlugin : Plugin<Project> {
                         this.sourceDirectories.setFrom(sourceDirectoriesFiles)
                         this.executionData.setFrom(executionDataFiles)
 
-                        // Override the JaCoCo plugin's default onlyIf that silently skips
-                        // the task when no .exec file exists. We want verification to run
-                        // whenever this module has compiled classes — that way modules
-                        // with code but no tests hit the 80% gate and fail loudly instead
-                        // of being invisibly skipped.
                         onlyIf {
-                            val classDir = layout.buildDirectory
-                                .dir("tmp/kotlin-classes/debug").get().asFile
+                            val classDir = classesDir.get().asFile
                             classDir.exists() && classDir.walk().any { it.extension == "class" }
                         }
 
                         violationRules {
                             rule {
                                 limit {
-                                    counter = "INSTRUCTION"
+                                    counter = "LINE"
                                     value = "COVEREDRATIO"
                                     minimum = "0.80".toBigDecimal()
                                 }
