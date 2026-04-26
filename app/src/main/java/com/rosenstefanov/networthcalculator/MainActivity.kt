@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import com.rosenstefanov.networthcalculator.ui.theme.NetWorthCalculatorTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,10 +13,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MaterialTheme {
-                Surface {
-                    // Navigation host will go here in Stage 6
-                }
+            NetWorthCalculatorTheme {
+                NetWorthApp()
             }
         }
     }

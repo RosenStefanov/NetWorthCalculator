@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.rosenstefanov.networthcalculator.core.database.impl"
+    namespace = "com.rosenstefanov.networthcalculator.feature.database.impl"
 }
 
 dependencies {

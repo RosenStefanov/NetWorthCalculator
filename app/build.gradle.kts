@@ -1,5 +1,6 @@
 plugins {
     id("networthcalculator.android.application")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -17,16 +18,23 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
-    testImplementation(libs.junit)
+    testImplementation(project(":core:testing"))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Navigation 3
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+    implementation(libs.hilt.navigation.compose)
 
     // Core
     implementation(project(":core:common"))
     implementation(project(":core:database:impl"))
     implementation(project(":core:ui"))
+    implementation(project(":core:navigation"))
 
     // Features
     implementation(project(":feature:dashboard:impl"))

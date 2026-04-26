@@ -7,7 +7,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:assets:api"))
+    api(project(":feature:assets:api"))
+    implementation(project(":feature:settings:api"))
     implementation(project(":core:database:api"))
     implementation(project(":core:ui"))
     implementation(project(":core:common"))

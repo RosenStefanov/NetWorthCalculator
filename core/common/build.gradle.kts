@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.rosenstefanov.networthcalculator.common"
+    namespace = "com.rosenstefanov.networthcalculator.core.common"
 }
 
 dependencies {

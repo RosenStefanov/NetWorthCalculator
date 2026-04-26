@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".NetWorthApp"
+        android:name=".NetWorthApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:theme="@style/Theme.NetWorthCalculator"

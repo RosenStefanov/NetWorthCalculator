@@ -39,17 +39,26 @@ style:
     maxLineLength: 120
     excludeCommentStatements: true
   MagicNumber:
+    # Disabled: Compose modifier/layout code uses literal dp/sp values heavily;
+    # extracting every dimension into a named const produces more noise than value.
     active: false
   ForbiddenComment:
+    # Disabled: TODO/FIXME comments are an intentional progress-tracking tool during
+    # staged development. Will revisit in Stage 11 (release prep).
     active: false
   ReturnCount:
     max: 3
   WildcardImport:
+    # Disabled: ktlint already enforces no-wildcard-imports; having both rules report
+    # the same issue produces duplicate CI annotations.
     active: false
   UnusedPrivateMember:
     allowedNames: "(_|ignored|expected|serialVersionUID)"
 
 formatting:
+  # Disabled: ktlint is the single authority for formatting rules. Running both
+  # detekt's formatting ruleset and ktlint produces conflicting fix suggestions
+  # and duplicate CI annotations for the same issue.
   active: false
 
 empty-blocks:

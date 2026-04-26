@@ -33,6 +33,7 @@ include(":core:testing")
 include(":core:database:api")
 include(":core:database:impl")
 include(":core:ui")
+include(":core:navigation")
 
 // Feature: Dashboard
 include(":feature:dashboard:api")

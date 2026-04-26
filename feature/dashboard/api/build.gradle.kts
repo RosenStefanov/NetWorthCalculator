@@ -1,5 +1,6 @@
 plugins {
     id("networthcalculator.android.library")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -8,4 +9,6 @@ android {
 
 dependencies {
     implementation(project(":core:common"))
+    implementation(libs.kotlinx.serialization.json)
+    api(libs.navigation3.runtime)
 }

@@ -65,15 +65,25 @@ tasks.register<Copy>("installGitHook") {
 }
 
 gradle.projectsEvaluated {
-    tasks.register("jacocoFullReport") {
-        description = "Runs all module JaCoCo reports"
+    tasks.register("jacocoCoverageVerification") {
         group = "verification"
-        dependsOn(subprojects.mapNotNull { it.tasks.findByName("jacocoTestReport") })
+        description = "Aggregate coverage verification across all leaf modules"
+        dependsOn(
+            subprojects
+                .filter { it.childProjects.isEmpty() } // only leaf modules
+                .filter { !it.path.contains(":testing") } // exclude core:testing
+                .map { "${it.path}:jacocoDebugCoverageVerification" }
+        )
     }
 
-    tasks.register("jacocoCoverageVerification") {
-        description = "Runs all module JaCoCo coverage verification"
+    tasks.register("jacocoFullReport") {
         group = "verification"
-        dependsOn(subprojects.mapNotNull { it.tasks.findByName("jacocoTestCoverageVerification") })
+        description = "Aggregate coverage report across all leaf modules"
+        dependsOn(
+            subprojects
+                .filter { it.childProjects.isEmpty() }
+                .filter { !it.path.contains(":testing") }
+                .map { "${it.path}:jacocoDebugTestReport" }
+        )
     }
 }
