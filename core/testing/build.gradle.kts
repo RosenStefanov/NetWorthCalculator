@@ -1,5 +1,6 @@
 plugins {
     id("networthcalculator.android.library")
+    id("networthcalculator.android.library.compose")
 }
 
 android {
@@ -25,4 +26,10 @@ dependencies {
     api(libs.mockk)
     api(libs.turbine)
     api(libs.truth)
+
+    api(libs.roborazzi)
+    api(libs.roborazzi.compose)
+    api(libs.roborazzi.junit.rule)
+    api(libs.robolectric)
+    api(libs.compose.ui.test.junit4)
 }
