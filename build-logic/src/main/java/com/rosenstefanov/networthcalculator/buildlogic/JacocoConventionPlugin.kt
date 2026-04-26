@@ -1,6 +1,5 @@
 package com.rosenstefanov.networthcalculator.buildlogic
 
-import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -22,10 +21,12 @@ class JacocoConventionPlugin : Plugin<Project> {
             }
 
             val jacocoExcludes = listOf(
+                // Android / build generated
                 "**/R.class",
                 "**/R\$*.class",
                 "**/BuildConfig.*",
                 "**/Manifest*.*",
+                // Hilt generated
                 "**/*_HiltModules*.*",
                 "**/*_Factory.*",
                 "**/*_MembersInjector.*",
@@ -34,25 +35,49 @@ class JacocoConventionPlugin : Plugin<Project> {
                 "**/*Hilt_*.*",
                 "**/*_GeneratedInjector.*",
                 "**/hilt_aggregated_deps/**",
+                // Compose UI — exercised by instrumentation / snapshot tests, not JVM unit tests
+                "**/*Screen.*",
+                "**/*Screen\$*.*",
+                "**/ComposableSingletons*.*",
+                "**/RememberNavigatorKt.*",
+                "**/ui/theme/**",
+                // Navigation plumbing — declarative, no logic to cover
+                "**/*Route.*",
+                "**/*Routes.*",
+                "**/*Navigation.*",
+                "**/AppNavDisplay*.*",
+                "**/NetWorthApp*.*",
+                "**/FloatingBottomNavBar*.*",
+                // Android framework entry points
+                "**/MainActivity.*",
+                "**/*Application.*",
             )
 
+            val isTestingModule = path.contains(":testing")
+
+            // Task registration must live inside afterEvaluate so the local collections
+            // are correctly captured in the task configuration closures. A previous
+            // version registered the verification task outside afterEvaluate, which
+            // caused `classDirectories` to resolve to the task's own (empty) property
+            // instead of the intended FileCollection — leaving verification vacuously
+            // passing on every module.
             afterEvaluate {
-                val classDirectories = files(
-                    fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+                val classDirectoriesFiles = files(
+                    fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
                         exclude(jacocoExcludes)
                     },
-                    fileTree("${buildDir}/intermediates/javac/debug") {
+                    fileTree(layout.buildDirectory.dir("intermediates/javac/debug")) {
                         exclude(jacocoExcludes)
                     },
                 )
 
-                val sourceDirectories = files(
-                    "${projectDir}/src/main/java",
-                    "${projectDir}/src/main/kotlin",
+                val sourceDirectoriesFiles = files(
+                    layout.projectDirectory.dir("src/main/java"),
+                    layout.projectDirectory.dir("src/main/kotlin"),
                 )
 
-                val executionData = files(
-                    "${buildDir}/jacoco/testDebugUnitTest.exec",
+                val executionDataFiles = files(
+                    layout.buildDirectory.file("jacoco/testDebugUnitTest.exec"),
                 )
 
                 tasks.register<JacocoReport>("jacocoDebugTestReport") {
@@ -60,9 +85,9 @@ class JacocoConventionPlugin : Plugin<Project> {
                     group = "verification"
                     dependsOn("testDebugUnitTest")
 
-                    this.classDirectories.setFrom(classDirectories)
-                    this.sourceDirectories.setFrom(sourceDirectories)
-                    this.executionData.setFrom(executionData)
+                    this.classDirectories.setFrom(classDirectoriesFiles)
+                    this.sourceDirectories.setFrom(sourceDirectoriesFiles)
+                    this.executionData.setFrom(executionDataFiles)
 
                     reports {
                         xml.required.set(true)
@@ -71,17 +96,27 @@ class JacocoConventionPlugin : Plugin<Project> {
                     }
                 }
 
-                val isTestingModule = path.contains(":testing")
-
                 if (!isTestingModule) {
                     tasks.register<JacocoCoverageVerification>("jacocoDebugCoverageVerification") {
                         description = "Verifies JaCoCo coverage meets 80% threshold"
                         group = "verification"
+                        dependsOn("testDebugUnitTest")
                         dependsOn("jacocoDebugTestReport")
 
-                        this.classDirectories.setFrom(classDirectories)
-                        this.sourceDirectories.setFrom(sourceDirectories)
-                        this.executionData.setFrom(executionData)
+                        this.classDirectories.setFrom(classDirectoriesFiles)
+                        this.sourceDirectories.setFrom(sourceDirectoriesFiles)
+                        this.executionData.setFrom(executionDataFiles)
+
+                        // Override the JaCoCo plugin's default onlyIf that silently skips
+                        // the task when no .exec file exists. We want verification to run
+                        // whenever this module has compiled classes — that way modules
+                        // with code but no tests hit the 80% gate and fail loudly instead
+                        // of being invisibly skipped.
+                        onlyIf {
+                            val classDir = layout.buildDirectory
+                                .dir("tmp/kotlin-classes/debug").get().asFile
+                            classDir.exists() && classDir.walk().any { it.extension == "class" }
+                        }
 
                         violationRules {
                             rule {

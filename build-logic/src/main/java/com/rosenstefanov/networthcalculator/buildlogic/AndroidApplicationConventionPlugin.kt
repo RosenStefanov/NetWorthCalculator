@@ -17,6 +17,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.plugin.compose")
                 apply("com.google.dagger.hilt.android")
                 apply("com.google.devtools.ksp")
+                apply("de.mannodermaus.android-junit5")
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -59,9 +60,11 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 add("implementation", platform(libs.findLibrary("compose.bom").get()))
                 add("implementation", libs.findLibrary("hilt.android").get())
                 add("ksp", libs.findLibrary("hilt.compiler").get())
+                add("testRuntimeOnly", libs.findLibrary("junit.platform.launcher").get())
             }
 
             pluginManager.apply(KotlinAndroidConventionPlugin::class.java)
+            pluginManager.apply(JacocoConventionPlugin::class.java)
         }
     }
 }

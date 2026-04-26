@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.rosenstefanov.networthcalculator.core.ui"
+    namespace = "com.rosenstefanov.networthcalculator.feature.ui"
 }
 
 dependencies {

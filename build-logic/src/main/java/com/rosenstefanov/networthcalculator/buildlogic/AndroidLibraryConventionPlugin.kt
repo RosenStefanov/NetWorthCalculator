@@ -5,6 +5,7 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
@@ -16,6 +17,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+            dependencies {
+                add("testRuntimeOnly", libs.findLibrary("junit.platform.launcher").get())
+            }
 
             extensions.configure(LibraryExtension::class.java) {
                 compileSdk = libs.findVersion("compileSdk").get().requiredVersion.toInt()

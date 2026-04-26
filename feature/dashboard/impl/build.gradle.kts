@@ -7,9 +7,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:dashboard:api"))
+    api(project(":feature:dashboard:api"))
     implementation(project(":feature:assets:api"))
     implementation(project(":feature:liabilities:api"))
+    implementation(project(":feature:settings:api"))
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
 

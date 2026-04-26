@@ -1,13 +1,13 @@
-plugins{
+plugins {
     id("networthcalculator.android.library")
 }
 
 android {
-    namespace = "com.rosenstefanov.networthcalculator.testing"
+    namespace = "com.rosenstefanov.networthcalculator.core.testing"
 }
 
 dependencies {
-    implementation(project(":core:common"))
+    api(project(":core:common"))
 
     // JUnit 5
     api(libs.junit5.api)
@@ -16,13 +16,13 @@ dependencies {
 
     // JUnit 4 backward compat
     runtimeOnly(libs.junit.vintage.engine)
-    implementation(libs.junit)
+    api(libs.junit)
 
     // Coroutines
-    implementation(libs.kotlinx.coroutines.test)
+    api(libs.kotlinx.coroutines.test)
 
     // Mocking & assertions
-    implementation(libs.mockk)
-    implementation(libs.turbine)
-    implementation(libs.truth)
+    api(libs.mockk)
+    api(libs.turbine)
+    api(libs.truth)
 }
