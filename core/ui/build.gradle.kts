@@ -10,6 +10,7 @@ android {
 dependencies {
     implementation(project(":core:common"))
 
+    implementation(libs.androidx.core.ktx)
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
 }

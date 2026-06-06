@@ -2,6 +2,8 @@ package com.rosenstefanov.networthcalculator.navigation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -40,7 +42,9 @@ fun FloatingBottomNavBar(
     modifier: Modifier = Modifier,
 ) {
     Surface(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier
+            .navigationBarsPadding()
+            .padding(16.dp),
         shape = RoundedCornerShape(28.dp),
         color = MaterialTheme.colorScheme.surfaceContainer,
         shadowElevation = 6.dp,

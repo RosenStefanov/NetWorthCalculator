@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+      API 26+ adaptive icon.
+      mipmap-anydpi-v26 beats density-specific mipmap folders (hdpi/xhdpi/etc.)
+      on API 26+ devices, so this XML is guaranteed to win over the legacy WebP files.
+      Solid brand indigo fills any corner pixels outside ic_logo's rounded-rect gradient.
+    -->
     <background android:drawable="@color/ic_launcher_background_color" />
     <foreground android:drawable="@drawable/ic_logo" />
     <monochrome android:drawable="@drawable/ic_logo" />

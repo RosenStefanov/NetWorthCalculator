@@ -9,6 +9,7 @@ android {
 
 dependencies {
     api(project(":core:common"))
+    api(project(":core:ui"))
 
     // JUnit 5
     api(libs.junit5.api)
