@@ -1,11 +1,11 @@
 package com.rosenstefanov.networthcalculator.core.testing
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import com.github.takahirom.roborazzi.captureRoboImage
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -22,7 +22,7 @@ abstract class ScreenSnapshotTest {
 
     protected fun captureSnapshot(content: @Composable () -> Unit) {
         composeTestRule.setContent {
-            MaterialTheme { content() }
+            NetWorthCalculatorTheme { content() }
         }
         composeTestRule.onRoot().captureRoboImage()
     }

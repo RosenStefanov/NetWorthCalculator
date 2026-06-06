@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons.extended)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.splashscreen)
     debugImplementation(libs.compose.ui.tooling)
     testImplementation(project(":core:testing"))
     androidTestImplementation(libs.androidx.junit)
