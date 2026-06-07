@@ -11,7 +11,13 @@ sealed interface DashboardUiState {
         val assetsTotal: Money,
         val liabilitiesTotal: Money,
         val topHoldings: List<HoldingRow>,
+        val change: NetWorthChange? = null,
     ) : DashboardUiState
+
+    data class NetWorthChange(
+        val label: String,
+        val isGain: Boolean,
+    )
 
     data class Error(val message: String) : DashboardUiState
 }

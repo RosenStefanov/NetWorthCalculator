@@ -1,6 +1,7 @@
 plugins {
     id("networthcalculator.android.library")
     id("networthcalculator.android.library.compose")
+    id("networthcalculator.roborazzi")
 }
 
 android {
@@ -13,4 +14,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
+
+    testImplementation(project(":core:testing"))
 }
