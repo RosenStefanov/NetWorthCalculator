@@ -1,5 +1,8 @@
 package com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models
 
+import com.rosenstefanov.networthcalculator.core.ui.models.HoldingType
+import com.rosenstefanov.networthcalculator.core.ui.models.TopHolding
+
 sealed interface DashboardUiState {
 
     data object Loading : DashboardUiState
@@ -14,7 +17,9 @@ sealed interface DashboardUiState {
         val trend: NetWorthTrend,
         val ranges: List<String>,
         val selectedRange: String,
-        val topHoldings: List<HoldingRow>,
+        val assetHoldings: List<TopHolding>,
+        val liabilityHoldings: List<TopHolding>,
+        val selectedHoldingType: HoldingType,
         val change: NetWorthChange? = null,
     ) : DashboardUiState
 

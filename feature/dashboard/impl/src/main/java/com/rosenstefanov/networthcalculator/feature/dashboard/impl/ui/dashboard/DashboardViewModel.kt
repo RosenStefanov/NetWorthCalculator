@@ -2,10 +2,12 @@ package com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rosenstefanov.networthcalculator.core.ui.models.HoldingType
+import com.rosenstefanov.networthcalculator.core.ui.models.TopHolding
+import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardEffect
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardIntent
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardUiState
-import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.HoldingRow
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.Money
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -45,6 +47,12 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
                     _uiState.value = current.copy(selectedRange = intent.range)
                 }
             }
+            is DashboardIntent.HoldingTypeSelected -> {
+                val current = _uiState.value
+                if (current is DashboardUiState.Content) {
+                    _uiState.value = current.copy(selectedHoldingType = intent.type)
+                }
+            }
         }
     }
 
@@ -72,16 +80,12 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
             ),
             ranges = RANGES,
             selectedRange = DEFAULT_RANGE,
+            assetHoldings = ASSET_HOLDINGS,
+            liabilityHoldings = LIABILITY_HOLDINGS,
+            selectedHoldingType = HoldingType.Assets,
             change = DashboardUiState.NetWorthChange(
                 label = "+€1,480 · 4.2% this month",
                 isGain = true,
-            ),
-            topHoldings = listOf(
-                HoldingRow(1, "Apartment", "🏠", eur("250000.00"), isLiability = false),
-                HoldingRow(2, "Mortgage", "🏦", eur("200000.00"), isLiability = true),
-                HoldingRow(3, "S&P 500 ETF", "📈", eur("30000.00"), isLiability = false),
-                HoldingRow(4, "Savings (USD)", "💰", eur("12100.00"), isLiability = false),
-                HoldingRow(5, "Credit Card", "💳", eur("1500.00"), isLiability = true),
             ),
         )
     }
@@ -102,5 +106,19 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
         val SAMPLE_LIABILITIES_TREND =
             listOf(.858f, .861f, .866f, .863f, .870f, .873f, .875f, .880f, .883f, .885f, .887f, .889f)
         val SAMPLE_MONTH_LABELS = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun")
+
+        val ASSET_HOLDINGS = listOf(
+            TopHolding(NetWorthIcons.Home, "Primary Residence", "Real estate", "$312,000", 312_000),
+            TopHolding(NetWorthIcons.ChartUp, "Brokerage", "Investments", "$58,400", 58_400),
+            TopHolding(NetWorthIcons.AssetsCoins, "401(k)", "Retirement", "$24,500", 24_500),
+            TopHolding(NetWorthIcons.Cash, "Cash & Savings", "Bank", "$12,400", 12_400),
+            TopHolding(NetWorthIcons.Car, "Vehicle", "Auto", "$5,000", 5_000),
+        )
+        val LIABILITY_HOLDINGS = listOf(
+            TopHolding(NetWorthIcons.Home, "Mortgage", "Home loan", "$108,200", 108_200),
+            TopHolding(NetWorthIcons.Car, "Auto Loan", "Vehicle", "$12,300", 12_300),
+            TopHolding(NetWorthIcons.LiabilitiesCard, "Credit Cards", "Revolving", "$4,850", 4_850),
+            TopHolding(NetWorthIcons.Document, "Student Loan", "Education", "$2,200", 2_200),
+        )
     }
 }
