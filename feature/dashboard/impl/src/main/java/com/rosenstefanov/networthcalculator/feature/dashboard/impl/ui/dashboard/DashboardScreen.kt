@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rosenstefanov.networthcalculator.core.ui.component.AssetsVsLiabilitiesCard
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthCard
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthDeltaPill
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthTopAppBar
@@ -99,6 +99,7 @@ internal fun DashboardScreen(
             DashboardUiState.Empty -> DashboardEmpty(Modifier.padding(padding))
             is DashboardUiState.Content -> DashboardContent(
                 state = uiState,
+                onIntent = onIntent,
                 modifier = Modifier.padding(padding),
             )
             is DashboardUiState.Error -> DashboardError(
@@ -113,6 +114,7 @@ internal fun DashboardScreen(
 @Composable
 private fun DashboardContent(
     state: DashboardUiState.Content,
+    onIntent: (DashboardIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -138,23 +140,17 @@ private fun DashboardContent(
             }
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            SummaryTile(
-                label = "Assets",
-                value = state.assetsTotal.formatted(),
-                valueColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.weight(1f),
-            )
-            SummaryTile(
-                label = "Liabilities",
-                value = state.liabilitiesTotal.formatted(),
-                valueColor = MaterialTheme.colorScheme.error,
-                modifier = Modifier.weight(1f),
-            )
-        }
+        AssetsVsLiabilitiesCard(
+            assetsValue = state.assetsTotal.formatted(),
+            liabilitiesValue = state.liabilitiesTotal.formatted(),
+            assetsWeight = state.assetsWeight,
+            assetsTrend = state.trend.assets,
+            liabilitiesTrend = state.trend.liabilities,
+            monthLabels = state.trend.monthLabels,
+            ranges = state.ranges,
+            selectedRange = state.selectedRange,
+            onRangeSelected = { onIntent(DashboardIntent.RangeSelected(it)) },
+        )
 
         Spacer(Modifier.height(24.dp))
 
@@ -176,31 +172,6 @@ private fun DashboardContent(
 
         state.topHoldings.forEach { holding ->
             HoldingItem(holding)
-        }
-    }
-}
-
-@Composable
-private fun SummaryTile(
-    label: String,
-    value: String,
-    valueColor: Color,
-    modifier: Modifier = Modifier,
-) {
-    Card(modifier = modifier) {
-        Column(Modifier.padding(16.dp)) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = value,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = valueColor,
-            )
         }
     }
 }
@@ -306,6 +277,14 @@ private fun previewContent() = DashboardUiState.Content(
     netWorth = Money(BigDecimal("42500.00"), "EUR"),
     assetsTotal = Money(BigDecimal("58200.00"), "EUR"),
     liabilitiesTotal = Money(BigDecimal("15700.00"), "EUR"),
+    assetsWeight = 0.787f,
+    trend = DashboardUiState.NetWorthTrend(
+        assets = listOf(.321f, .306f, .292f, .297f, .275f, .257f, .262f, .243f, .228f, .221f, .206f, .194f),
+        liabilities = listOf(.858f, .861f, .866f, .863f, .870f, .873f, .875f, .880f, .883f, .885f, .887f, .889f),
+        monthLabels = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun"),
+    ),
+    ranges = listOf("1M", "6M", "1Y", "All"),
+    selectedRange = "1Y",
     change = DashboardUiState.NetWorthChange("+€1,480 · 4.2% this month", isGain = true),
     topHoldings = listOf(
         HoldingRow(1, "Apartment", "🏠", Money(BigDecimal("250000.00"), "EUR"), false),

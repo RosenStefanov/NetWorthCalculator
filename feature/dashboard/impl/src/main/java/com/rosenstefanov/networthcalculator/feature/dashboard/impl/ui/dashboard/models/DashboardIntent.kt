@@ -4,4 +4,5 @@ sealed interface DashboardIntent {
     data object Refresh : DashboardIntent
     data object RetryClicked : DashboardIntent
     data object SettingsClicked : DashboardIntent
+    data class RangeSelected(val range: String) : DashboardIntent
 }

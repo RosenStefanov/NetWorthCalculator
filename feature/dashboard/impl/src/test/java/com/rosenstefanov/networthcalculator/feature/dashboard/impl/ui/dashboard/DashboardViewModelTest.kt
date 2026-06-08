@@ -64,6 +64,30 @@ class DashboardViewModelTest {
             .inOrder()
         assertThat(content.topHoldings.filter { it.isLiability }.map { it.label })
             .containsExactly("Mortgage", "Credit Card")
+        // assetsWeight = 58200 / (58200 + 15700) ≈ 0.7875
+        assertThat(content.assetsWeight).isWithin(0.001f).of(0.7875f)
+        assertThat(content.selectedRange).isEqualTo("1Y")
+        assertThat(content.ranges).containsExactly("1M", "6M", "1Y", "All").inOrder()
+        assertThat(content.trend.assets).hasSize(12)
+        assertThat(content.trend.monthLabels).containsExactly("Jul", "Sep", "Nov", "Jan", "Mar", "Jun").inOrder()
+    }
+
+    @Test
+    fun `RangeSelected updates selectedRange without reloading`() = runTest(testDispatcher) {
+        // Given - loaded content on the default range
+        val viewModel = DashboardViewModel()
+        advanceUntilIdle()
+        val before = viewModel.uiState.value as DashboardUiState.Content
+        assertThat(before.selectedRange).isEqualTo("1Y")
+
+        // When
+        viewModel.onIntent(DashboardIntent.RangeSelected("6M"))
+        advanceUntilIdle()
+
+        // Then - only the selected range changed; the rest of the content is untouched
+        val after = viewModel.uiState.value as DashboardUiState.Content
+        assertThat(after.selectedRange).isEqualTo("6M")
+        assertThat(after).isEqualTo(before.copy(selectedRange = "6M"))
     }
 
     @Test

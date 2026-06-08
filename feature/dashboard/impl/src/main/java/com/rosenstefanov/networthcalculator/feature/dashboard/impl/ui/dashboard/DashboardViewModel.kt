@@ -39,6 +39,12 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
             DashboardIntent.SettingsClicked -> viewModelScope.launch {
                 _effects.send(DashboardEffect.NavigateToSettings)
             }
+            is DashboardIntent.RangeSelected -> {
+                val current = _uiState.value
+                if (current is DashboardUiState.Content) {
+                    _uiState.value = current.copy(selectedRange = intent.range)
+                }
+            }
         }
     }
 
@@ -52,10 +58,20 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
 
     private fun fakeContent(): DashboardUiState.Content {
         fun eur(value: String) = Money(BigDecimal(value), "EUR")
+        val assets = eur("58200.00")
+        val liabilities = eur("15700.00")
         return DashboardUiState.Content(
             netWorth = eur("42500.00"),
-            assetsTotal = eur("58200.00"),
-            liabilitiesTotal = eur("15700.00"),
+            assetsTotal = assets,
+            liabilitiesTotal = liabilities,
+            assetsWeight = assetsWeight(assets, liabilities),
+            trend = DashboardUiState.NetWorthTrend(
+                assets = SAMPLE_ASSETS_TREND,
+                liabilities = SAMPLE_LIABILITIES_TREND,
+                monthLabels = SAMPLE_MONTH_LABELS,
+            ),
+            ranges = RANGES,
+            selectedRange = DEFAULT_RANGE,
             change = DashboardUiState.NetWorthChange(
                 label = "+€1,480 · 4.2% this month",
                 isGain = true,
@@ -70,7 +86,21 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
         )
     }
 
+    private fun assetsWeight(assets: Money, liabilities: Money): Float {
+        val total = assets.amount + liabilities.amount
+        if (total <= BigDecimal.ZERO) return 1f
+        return assets.amount.divide(total, 4, java.math.RoundingMode.HALF_UP).toFloat()
+    }
+
     private companion object {
         const val LOAD_DELAY_MS = 300L
+        const val DEFAULT_RANGE = "1Y"
+        val RANGES = listOf("1M", "6M", "1Y", "All")
+
+        val SAMPLE_ASSETS_TREND =
+            listOf(.321f, .306f, .292f, .297f, .275f, .257f, .262f, .243f, .228f, .221f, .206f, .194f)
+        val SAMPLE_LIABILITIES_TREND =
+            listOf(.858f, .861f, .866f, .863f, .870f, .873f, .875f, .880f, .883f, .885f, .887f, .889f)
+        val SAMPLE_MONTH_LABELS = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun")
     }
 }
