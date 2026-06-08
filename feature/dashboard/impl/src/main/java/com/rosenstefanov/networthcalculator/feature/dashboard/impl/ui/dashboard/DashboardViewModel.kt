@@ -50,13 +50,16 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    // Hardcoded data for Chunk 1. Replaced by a repository-backed flow in Chunk 8.
     private fun fakeContent(): DashboardUiState.Content {
         fun eur(value: String) = Money(BigDecimal(value), "EUR")
         return DashboardUiState.Content(
             netWorth = eur("42500.00"),
             assetsTotal = eur("58200.00"),
             liabilitiesTotal = eur("15700.00"),
+            change = DashboardUiState.NetWorthChange(
+                label = "+€1,480 · 4.2% this month",
+                isGain = true,
+            ),
             topHoldings = listOf(
                 HoldingRow(1, "Apartment", "🏠", eur("250000.00"), isLiability = false),
                 HoldingRow(2, "Mortgage", "🏦", eur("200000.00"), isLiability = true),

@@ -11,20 +11,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,10 +27,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthCard
+import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthDeltaPill
+import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthTopAppBar
+import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardEffect
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardIntent
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardUiState
@@ -44,10 +45,6 @@ import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.Money
 import java.math.BigDecimal
 
-/**
- * Route-level composable. Owns the ViewModel, collects state + one-shot effects,
- * and delegates rendering to the stateless [DashboardScreen] below.
- */
 @Composable
 internal fun DashboardScreen(
     onNavigateToSettings: () -> Unit,
@@ -69,10 +66,6 @@ internal fun DashboardScreen(
     )
 }
 
-/**
- * Stateless screen — renders purely from [uiState]. Drives all previews + snapshots.
- */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DashboardScreen(
     uiState: DashboardUiState,
@@ -80,15 +73,26 @@ internal fun DashboardScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Net Worth Calculator") },
-                actions = {
-                    IconButton(onClick = { onIntent(DashboardIntent.SettingsClicked) }) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings")
+            NetWorthTopAppBar(
+                actionIcon = NetWorthIcons.SettingsGear,
+                actionContentDescription = "Settings",
+                onActionClick = { onIntent(DashboardIntent.SettingsClicked) },
+                leading = {
+                    Column{
+                        Text(
+                            text = "Hello",
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                        Text(
+                            text = "User",
+                            style = MaterialTheme.typography.headlineSmall,
+                        )
                     }
+
                 },
             )
         },
+        containerColor = MaterialTheme.colorScheme.background,
     ) { padding ->
         when (uiState) {
             DashboardUiState.Loading -> DashboardLoading(Modifier.padding(padding))
@@ -106,8 +110,6 @@ internal fun DashboardScreen(
     }
 }
 
-// region State composables
-
 @Composable
 private fun DashboardContent(
     state: DashboardUiState.Content,
@@ -117,28 +119,25 @@ private fun DashboardContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+            .padding(horizontal = 22.dp, vertical = 16.dp),
     ) {
-        // Hero
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        NetWorthCard(
+            title = "TOTAL NET WORTH",
+            modifier = Modifier.padding(bottom = 16.dp),
         ) {
             Text(
-                text = "Net Worth",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Text(
                 text = state.netWorth.formatted(),
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.displayLarge.copy(letterSpacing = (-0.02).em),
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
+            state.change?.let { change ->
+                Spacer(Modifier.height(13.dp))
+                NetWorthDeltaPill(text = change.label, isGain = change.isGain)
+            }
         }
 
-        Spacer(Modifier.height(16.dp))
-
-        // Two summary tiles
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -159,7 +158,6 @@ private fun DashboardContent(
 
         Spacer(Modifier.height(24.dp))
 
-        // Top holdings header
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -169,7 +167,7 @@ private fun DashboardContent(
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.weight(1f),
             )
-            TextButton(onClick = { /* See all — wired in Chunk 9 */ }) {
+            TextButton(onClick = {}) {
                 Text("See all")
             }
         }
@@ -267,7 +265,7 @@ private fun DashboardEmpty(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
         )
-        Button(onClick = { /* Add asset — wired in Chunk 9 */ }) {
+        Button(onClick = {}) {
             Text("Add your first asset")
         }
     }
@@ -304,14 +302,11 @@ private fun DashboardError(
     }
 }
 
-// endregion
-
-// region Previews
-
 private fun previewContent() = DashboardUiState.Content(
     netWorth = Money(BigDecimal("42500.00"), "EUR"),
     assetsTotal = Money(BigDecimal("58200.00"), "EUR"),
     liabilitiesTotal = Money(BigDecimal("15700.00"), "EUR"),
+    change = DashboardUiState.NetWorthChange("+€1,480 · 4.2% this month", isGain = true),
     topHoldings = listOf(
         HoldingRow(1, "Apartment", "🏠", Money(BigDecimal("250000.00"), "EUR"), false),
         HoldingRow(2, "Mortgage", "🏦", Money(BigDecimal("200000.00"), "EUR"), true),
@@ -324,7 +319,7 @@ private fun previewContent() = DashboardUiState.Content(
 @Preview(showBackground = true)
 @Composable
 internal fun DashboardLoadingPreview() {
-    MaterialTheme {
+    NetWorthCalculatorTheme {
         DashboardScreen(uiState = DashboardUiState.Loading, onIntent = {})
     }
 }
@@ -332,7 +327,7 @@ internal fun DashboardLoadingPreview() {
 @Preview(showBackground = true)
 @Composable
 internal fun DashboardEmptyPreview() {
-    MaterialTheme {
+    NetWorthCalculatorTheme {
         DashboardScreen(uiState = DashboardUiState.Empty, onIntent = {})
     }
 }
@@ -340,7 +335,7 @@ internal fun DashboardEmptyPreview() {
 @Preview(showBackground = true)
 @Composable
 internal fun DashboardContentPreview() {
-    MaterialTheme {
+    NetWorthCalculatorTheme {
         DashboardScreen(uiState = previewContent(), onIntent = {})
     }
 }
@@ -348,12 +343,10 @@ internal fun DashboardContentPreview() {
 @Preview(showBackground = true)
 @Composable
 internal fun DashboardErrorPreview() {
-    MaterialTheme {
+    NetWorthCalculatorTheme {
         DashboardScreen(
             uiState = DashboardUiState.Error("Couldn't load exchange rates"),
             onIntent = {},
         )
     }
 }
-
-// endregion

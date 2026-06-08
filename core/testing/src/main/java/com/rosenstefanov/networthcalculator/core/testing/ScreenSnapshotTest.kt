@@ -20,9 +20,12 @@ abstract class ScreenSnapshotTest {
     @get:Rule
     val composeTestRule: ComposeContentTestRule = createComposeRule()
 
-    protected fun captureSnapshot(content: @Composable () -> Unit) {
+    protected fun captureSnapshot(
+        darkTheme: Boolean = false,
+        content: @Composable () -> Unit,
+    ) {
         composeTestRule.setContent {
-            NetWorthCalculatorTheme { content() }
+            NetWorthCalculatorTheme(darkTheme = darkTheme) { content() }
         }
         composeTestRule.onRoot().captureRoboImage()
     }
