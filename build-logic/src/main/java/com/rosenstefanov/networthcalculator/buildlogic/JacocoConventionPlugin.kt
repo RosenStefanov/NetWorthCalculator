@@ -3,6 +3,7 @@ package com.rosenstefanov.networthcalculator.buildlogic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
@@ -72,6 +73,13 @@ class JacocoConventionPlugin : Plugin<Project> {
                     group = "verification"
                     description = "JaCoCo offline-instruments debug classes for Robolectric coverage."
                     dependsOn("compileDebugKotlin")
+                    // Declare the compiled classes as an input so the task re-instruments when
+                    // code changes. Without this, Gradle sees only the output dir and treats the
+                    // task as up-to-date, leaving STALE instrumented classes on the test classpath
+                    // (causes NoSuchMethodError or phantom low coverage after edits).
+                    inputs.dir(classesDir)
+                        .withPropertyName("classesToInstrument")
+                        .withPathSensitivity(PathSensitivity.RELATIVE)
                     outputs.dir(instrumentedDir)
                     onlyIf {
                         val src = classesDir.get().asFile
