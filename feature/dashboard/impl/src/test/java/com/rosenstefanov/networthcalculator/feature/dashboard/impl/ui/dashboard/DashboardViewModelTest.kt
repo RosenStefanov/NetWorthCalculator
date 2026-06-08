@@ -3,6 +3,7 @@ package com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.rosenstefanov.networthcalculator.core.testing.MainDispatcherExtension
+import com.rosenstefanov.networthcalculator.core.ui.models.HoldingType
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardEffect
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardIntent
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardUiState
@@ -58,12 +59,14 @@ class DashboardViewModelTest {
         assertThat(content.netWorth.currencyCode).isEqualTo("EUR")
         assertThat(content.assetsTotal.amount).isEqualTo(BigDecimal("58200.00"))
         assertThat(content.liabilitiesTotal.amount).isEqualTo(BigDecimal("15700.00"))
-        assertThat(content.topHoldings).hasSize(5)
-        assertThat(content.topHoldings.map { it.label })
-            .containsExactly("Apartment", "Mortgage", "S&P 500 ETF", "Savings (USD)", "Credit Card")
+        assertThat(content.assetHoldings).hasSize(5)
+        assertThat(content.assetHoldings.map { it.name })
+            .containsExactly("Primary Residence", "Brokerage", "401(k)", "Cash & Savings", "Vehicle")
             .inOrder()
-        assertThat(content.topHoldings.filter { it.isLiability }.map { it.label })
-            .containsExactly("Mortgage", "Credit Card")
+        assertThat(content.liabilityHoldings.map { it.name })
+            .containsExactly("Mortgage", "Auto Loan", "Credit Cards", "Student Loan")
+            .inOrder()
+        assertThat(content.selectedHoldingType).isEqualTo(HoldingType.Assets)
         // assetsWeight = 58200 / (58200 + 15700) ≈ 0.7875
         assertThat(content.assetsWeight).isWithin(0.001f).of(0.7875f)
         assertThat(content.selectedRange).isEqualTo("1Y")
@@ -88,6 +91,24 @@ class DashboardViewModelTest {
         val after = viewModel.uiState.value as DashboardUiState.Content
         assertThat(after.selectedRange).isEqualTo("6M")
         assertThat(after).isEqualTo(before.copy(selectedRange = "6M"))
+    }
+
+    @Test
+    fun `HoldingTypeSelected switches the shown holdings type`() = runTest(testDispatcher) {
+        // Given - loaded content defaulting to Assets
+        val viewModel = DashboardViewModel()
+        advanceUntilIdle()
+        val before = viewModel.uiState.value as DashboardUiState.Content
+        assertThat(before.selectedHoldingType).isEqualTo(HoldingType.Assets)
+
+        // When
+        viewModel.onIntent(DashboardIntent.HoldingTypeSelected(HoldingType.Liabilities))
+        advanceUntilIdle()
+
+        // Then - only the selected type changed
+        val after = viewModel.uiState.value as DashboardUiState.Content
+        assertThat(after.selectedHoldingType).isEqualTo(HoldingType.Liabilities)
+        assertThat(after).isEqualTo(before.copy(selectedHoldingType = HoldingType.Liabilities))
     }
 
     @Test

@@ -17,14 +17,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,12 +34,14 @@ import com.rosenstefanov.networthcalculator.core.ui.component.AssetsVsLiabilitie
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthCard
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthDeltaPill
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthTopAppBar
+import com.rosenstefanov.networthcalculator.core.ui.models.HoldingType
+import com.rosenstefanov.networthcalculator.core.ui.models.TopHolding
+import com.rosenstefanov.networthcalculator.core.ui.component.TopHoldingsCard
 import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardEffect
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardIntent
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardUiState
-import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.HoldingRow
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.Money
 import java.math.BigDecimal
 
@@ -121,7 +121,7 @@ private fun DashboardContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 22.dp, vertical = 16.dp),
+            .padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 96.dp),
     ) {
         NetWorthCard(
             title = "TOTAL NET WORTH",
@@ -152,56 +152,12 @@ private fun DashboardContent(
             onRangeSelected = { onIntent(DashboardIntent.RangeSelected(it)) },
         )
 
-        Spacer(Modifier.height(24.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Top holdings",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f),
-            )
-            TextButton(onClick = {}) {
-                Text("See all")
-            }
-        }
-
-        Spacer(Modifier.height(4.dp))
-
-        state.topHoldings.forEach { holding ->
-            HoldingItem(holding)
-        }
-    }
-}
-
-@Composable
-private fun HoldingItem(holding: HoldingRow) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(text = holding.emoji, style = MaterialTheme.typography.titleLarge)
-        Text(
-            text = holding.label,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 12.dp),
-        )
-        val prefix = if (holding.isLiability) "−" else ""
-        Text(
-            text = "$prefix${holding.amount.formatted()}",
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Medium,
-            color = if (holding.isLiability) {
-                MaterialTheme.colorScheme.error
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            },
+        TopHoldingsCard(
+            assets = state.assetHoldings,
+            liabilities = state.liabilityHoldings,
+            selectedType = state.selectedHoldingType,
+            onTypeSelected = { onIntent(DashboardIntent.HoldingTypeSelected(it)) },
+            modifier = Modifier.padding(top = 16.dp),
         )
     }
 }
@@ -286,13 +242,20 @@ private fun previewContent() = DashboardUiState.Content(
     ranges = listOf("1M", "6M", "1Y", "All"),
     selectedRange = "1Y",
     change = DashboardUiState.NetWorthChange("+€1,480 · 4.2% this month", isGain = true),
-    topHoldings = listOf(
-        HoldingRow(1, "Apartment", "🏠", Money(BigDecimal("250000.00"), "EUR"), false),
-        HoldingRow(2, "Mortgage", "🏦", Money(BigDecimal("200000.00"), "EUR"), true),
-        HoldingRow(3, "S&P 500 ETF", "📈", Money(BigDecimal("30000.00"), "EUR"), false),
-        HoldingRow(4, "Savings (USD)", "💰", Money(BigDecimal("12100.00"), "EUR"), false),
-        HoldingRow(5, "Credit Card", "💳", Money(BigDecimal("1500.00"), "EUR"), true),
+    assetHoldings = listOf(
+        TopHolding(NetWorthIcons.Home, "Primary Residence", "Real estate", "$312,000", 312_000),
+        TopHolding(NetWorthIcons.ChartUp, "Brokerage", "Investments", "$58,400", 58_400),
+        TopHolding(NetWorthIcons.AssetsCoins, "401(k)", "Retirement", "$24,500", 24_500),
+        TopHolding(NetWorthIcons.Cash, "Cash & Savings", "Bank", "$12,400", 12_400),
+        TopHolding(NetWorthIcons.Car, "Vehicle", "Auto", "$5,000", 5_000),
     ),
+    liabilityHoldings = listOf(
+        TopHolding(NetWorthIcons.Home, "Mortgage", "Home loan", "$108,200", 108_200),
+        TopHolding(NetWorthIcons.Car, "Auto Loan", "Vehicle", "$12,300", 12_300),
+        TopHolding(NetWorthIcons.LiabilitiesCard, "Credit Cards", "Revolving", "$4,850", 4_850),
+        TopHolding(NetWorthIcons.Document, "Student Loan", "Education", "$2,200", 2_200),
+    ),
+    selectedHoldingType = HoldingType.Assets,
 )
 
 @Preview(showBackground = true)

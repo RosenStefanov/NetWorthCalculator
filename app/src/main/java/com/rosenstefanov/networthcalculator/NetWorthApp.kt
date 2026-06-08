@@ -2,10 +2,13 @@ package com.rosenstefanov.networthcalculator
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import com.rosenstefanov.networthcalculator.feature.assets.api.AssetsRoute
 import com.rosenstefanov.networthcalculator.feature.dashboard.api.DashboardRoute
@@ -27,7 +30,10 @@ fun NetWorthApp() {
         if (navigator.currentBackStack.size == 1) {
             FloatingBottomNavBar(
                 navigator = navigator,
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
+                    .padding(bottom = 22.dp),
             )
         }
     }
