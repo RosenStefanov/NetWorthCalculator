@@ -3,33 +3,34 @@ package com.rosenstefanov.networthcalculator.feature.assets.impl
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.rosenstefanov.networthcalculator.core.ui.component.SectionTopBar
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AssetsScreen(onNavigateToSettings: () -> Unit) {
+internal fun AssetsScreen(
+    onNavigateToSettings: () -> Unit,
+    onAddAccount: () -> Unit,
+) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Assets") },
-                actions = {
-                    IconButton(onClick = onNavigateToSettings) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings")
-                    }
-                },
+            SectionTopBar(
+                title = "Assets",
+                addBrush = NetWorthBrandBrush,
+                addGlow = Color(0xFF5B45F5).copy(alpha = 0.6f),
+                onSettings = onNavigateToSettings,
+                onAdd = onAddAccount,
             )
         },
+        containerColor = MaterialTheme.colorScheme.background,
     ) { padding ->
         Box(
             modifier = Modifier
@@ -45,5 +46,7 @@ internal fun AssetsScreen(onNavigateToSettings: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 internal fun AssetsScreenPreview() {
-    AssetsScreen(onNavigateToSettings = {})
+    NetWorthCalculatorTheme {
+        AssetsScreen(onNavigateToSettings = {}, onAddAccount = {})
+    }
 }

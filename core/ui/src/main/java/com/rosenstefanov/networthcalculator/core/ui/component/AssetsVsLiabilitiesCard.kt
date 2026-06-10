@@ -43,6 +43,7 @@ fun AssetsVsLiabilitiesCard(
     modifier: Modifier = Modifier,
     ranges: List<String> = DefaultRanges,
     title: String = "Assets vs. Liabilities",
+    formatAxisLabel: (Float) -> String = ::defaultTrendAxisLabel,
 ) {
     val ink = MaterialTheme.colorScheme.onSurface
     val surface = MaterialTheme.colorScheme.surface
@@ -73,9 +74,10 @@ fun AssetsVsLiabilitiesCard(
 
         if (hasTrend) {
             TrendChart(
-                assetsY = assetsTrend,
-                liabsY = liabilitiesTrend,
+                assetsValues = assetsTrend,
+                liabilitiesValues = liabilitiesTrend,
                 surface = surface,
+                formatAxisLabel = formatAxisLabel,
             )
             Spacer(Modifier.height(6.dp))
             MonthAxis(labels = monthLabels)
@@ -107,7 +109,7 @@ private fun MonthAxis(labels: List<String>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 2.dp),
+            .padding(start = 36.dp, end = 2.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         labels.forEach { label ->
@@ -170,8 +172,8 @@ internal fun AssetsVsLiabilitiesCardPreview() {
             assetsValue = "$412,300",
             liabilitiesValue = "$127,550",
             assetsWeight = 0.764f,
-            assetsTrend = listOf(.321f, .306f, .292f, .297f, .275f, .257f, .262f, .243f, .228f, .221f, .206f, .194f),
-            liabilitiesTrend = listOf(.858f, .861f, .866f, .863f, .870f, .873f, .875f, .880f, .883f, .885f, .887f, .889f),
+            assetsTrend = listOf(358_000f, 362_000f, 368_000f, 374_000f, 382_000f, 389_000f, 394_000f, 399_000f, 404_000f, 408_000f, 411_000f, 412_300f),
+            liabilitiesTrend = listOf(124_000f, 124_500f, 125_000f, 125_500f, 126_000f, 126_400f, 126_700f, 127_000f, 127_200f, 127_350f, 127_450f, 127_550f),
             monthLabels = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun"),
             selectedRange = "1Y",
             onRangeSelected = {},

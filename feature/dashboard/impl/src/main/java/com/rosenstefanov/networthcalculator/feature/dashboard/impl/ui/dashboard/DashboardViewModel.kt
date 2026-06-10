@@ -102,9 +102,9 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
         val RANGES = listOf("1M", "6M", "1Y", "All")
 
         val SAMPLE_ASSETS_TREND =
-            listOf(.321f, .306f, .292f, .297f, .275f, .257f, .262f, .243f, .228f, .221f, .206f, .194f)
+            listOf(48_000f, 49_500f, 50_800f, 51_600f, 52_900f, 53_700f, 54_800f, 55_500f, 56_400f, 57_100f, 57_700f, 58_200f)
         val SAMPLE_LIABILITIES_TREND =
-            listOf(.858f, .861f, .866f, .863f, .870f, .873f, .875f, .880f, .883f, .885f, .887f, .889f)
+            listOf(15_000f, 15_100f, 15_200f, 15_300f, 15_400f, 15_450f, 15_500f, 15_550f, 15_600f, 15_650f, 15_680f, 15_700f)
         val SAMPLE_MONTH_LABELS = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun")
 
         val ASSET_HOLDINGS = listOf(

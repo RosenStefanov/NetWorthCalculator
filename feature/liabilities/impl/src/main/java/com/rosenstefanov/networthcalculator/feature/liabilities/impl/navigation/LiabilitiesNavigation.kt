@@ -11,6 +11,8 @@ fun EntryProviderScope<NavKey>.liabilitiesEntries(navigator: Navigator) {
     entry<LiabilitiesRoute> {
         LiabilitiesScreen(
             onNavigateToSettings = { navigator.navigate(SettingsRoute) },
+            // TODO: navigate to the Add Account flow (pre-scoped to liabilities) once it exists.
+            onAddAccount = {},
         )
     }
 }

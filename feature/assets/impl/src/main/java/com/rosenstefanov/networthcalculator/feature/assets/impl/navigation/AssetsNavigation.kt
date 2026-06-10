@@ -11,6 +11,8 @@ fun EntryProviderScope<NavKey>.assetsEntries(navigator: Navigator) {
     entry<AssetsRoute> {
         AssetsScreen(
             onNavigateToSettings = { navigator.navigate(SettingsRoute) },
+            // TODO: navigate to the Add Account flow (pre-scoped to assets) once it exists.
+            onAddAccount = {},
         )
     }
 }
