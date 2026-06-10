@@ -45,6 +45,21 @@ class NavigatorTest {
     }
 
     @Test
+    fun `currentTabIndex tracks the selected tab and round-trips`() {
+        // Given
+        val navigator = Navigator(tabs)
+        assertThat(navigator.currentTabIndex).isEqualTo(0)
+
+        // When
+        navigator.navigate(TabB)
+
+        // Then - index reflects selection, and restoring from it reselects the same tab
+        assertThat(navigator.currentTabIndex).isEqualTo(1)
+        val restored = Navigator(tabs).apply { navigate(tabs[navigator.currentTabIndex]) }
+        assertThat(restored.currentTab).isEqualTo(TabB)
+    }
+
+    @Test
     fun `navigate to non-top-level route pushes onto current tab`() {
         // Given
         val navigator = Navigator(tabs)
