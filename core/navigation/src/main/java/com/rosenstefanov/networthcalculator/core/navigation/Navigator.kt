@@ -7,12 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.navigation3.runtime.NavKey
 
-/**
- * Owns per-tab back stacks for a multi-tab navigation layout.
- *
- * The set of top-level routes (tabs) is supplied by the app module so this
- * class has no knowledge of concrete feature routes.
- */
 class Navigator(val topLevelRoutes: List<NavKey>) {
 
     init {
@@ -26,6 +20,9 @@ class Navigator(val topLevelRoutes: List<NavKey>) {
 
     var currentTab: NavKey by mutableStateOf(topLevelRoutes.first())
         private set
+
+    val currentTabIndex: Int
+        get() = topLevelRoutes.indexOf(currentTab).coerceAtLeast(0)
 
     val currentBackStack: SnapshotStateList<NavKey>
         get() = tabBackStacks.getValue(currentTab)
