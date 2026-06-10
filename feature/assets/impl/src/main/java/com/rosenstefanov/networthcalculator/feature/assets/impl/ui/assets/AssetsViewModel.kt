@@ -40,7 +40,12 @@ class AssetsViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             _uiState.value = AssetsUiState.Loading
             delay(LOAD_DELAY_MS)
-            _uiState.value = AssetsUiState.Content
+            _uiState.value = AssetsUiState.Content(
+                total = "$412,300",
+                deltaText = "+3.1%",
+                isGain = true,
+                summary = "7 holdings · 5 categories",
+            )
         }
     }
 

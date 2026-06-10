@@ -1,12 +1,12 @@
 package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,9 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rosenstefanov.networthcalculator.core.ui.component.SectionTopBar
+import com.rosenstefanov.networthcalculator.core.ui.component.TotalCard
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthLiabilitiesBrush
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesEffect
@@ -48,27 +50,46 @@ internal fun LiabilitiesScreen(
     uiState: LiabilitiesUiState,
     onIntent: (LiabilitiesIntent) -> Unit,
 ) {
+    val accentGradient = NetWorthLiabilitiesBrush
+    val accentGlow = Color(0xFF9333EA).copy(alpha = 0.6f)
+
     Scaffold(
         topBar = {
             SectionTopBar(
                 title = "Liabilities",
-                addBrush = NetWorthLiabilitiesBrush,
-                addGlow = Color(0xFF9333EA).copy(alpha = 0.6f),
+                addBrush = accentGradient,
+                addGlow = accentGlow,
                 onSettings = { onIntent(LiabilitiesIntent.SettingsClicked) },
                 onAdd = { onIntent(LiabilitiesIntent.AddAccountClicked) },
             )
         },
         containerColor = MaterialTheme.colorScheme.background,
     ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            contentAlignment = Alignment.Center,
-        ) {
-            when (uiState) {
-                LiabilitiesUiState.Loading -> CircularProgressIndicator()
-                LiabilitiesUiState.Content -> Text("Liabilities")
+        when (uiState) {
+            LiabilitiesUiState.Loading -> Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
+            }
+
+            is LiabilitiesUiState.Content -> Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(horizontal = 22.dp, vertical = 16.dp),
+            ) {
+                TotalCard(
+                    label = "Total Liabilities",
+                    value = uiState.total,
+                    deltaText = uiState.deltaText,
+                    isGain = uiState.isGain,
+                    count = uiState.summary,
+                    gradient = accentGradient,
+                    glow = accentGlow,
+                )
             }
         }
     }
@@ -78,7 +99,15 @@ internal fun LiabilitiesScreen(
 @Composable
 internal fun LiabilitiesScreenContentPreview() {
     NetWorthCalculatorTheme {
-        LiabilitiesScreen(uiState = LiabilitiesUiState.Content, onIntent = {})
+        LiabilitiesScreen(
+            uiState = LiabilitiesUiState.Content(
+                total = "$127,550",
+                deltaText = "−1.8%",
+                isGain = false,
+                summary = "4 debts · 4 categories",
+            ),
+            onIntent = {},
+        )
     }
 }
 

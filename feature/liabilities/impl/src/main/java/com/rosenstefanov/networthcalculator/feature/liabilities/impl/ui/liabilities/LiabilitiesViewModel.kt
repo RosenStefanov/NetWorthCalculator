@@ -40,7 +40,12 @@ class LiabilitiesViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             _uiState.value = LiabilitiesUiState.Loading
             delay(LOAD_DELAY_MS)
-            _uiState.value = LiabilitiesUiState.Content
+            _uiState.value = LiabilitiesUiState.Content(
+                total = "$127,550",
+                deltaText = "−1.8%",
+                isGain = false,
+                summary = "4 debts · 4 categories",
+            )
         }
     }
 
