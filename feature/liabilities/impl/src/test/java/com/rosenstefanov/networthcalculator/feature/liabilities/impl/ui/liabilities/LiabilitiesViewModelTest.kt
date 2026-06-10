@@ -32,7 +32,11 @@ class LiabilitiesViewModelTest {
     fun `load emits Content after the delay`() = runTest(testDispatcher) {
         val viewModel = LiabilitiesViewModel()
         advanceUntilIdle()
-        assertThat(viewModel.uiState.value).isEqualTo(LiabilitiesUiState.Content)
+        val content = viewModel.uiState.value as LiabilitiesUiState.Content
+        assertThat(content.total).isEqualTo("$127,550")
+        assertThat(content.deltaText).isEqualTo("−1.8%")
+        assertThat(content.isGain).isFalse()
+        assertThat(content.summary).isEqualTo("4 debts · 4 categories")
     }
 
     @Test

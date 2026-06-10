@@ -4,5 +4,10 @@ sealed interface AssetsUiState {
 
     data object Loading : AssetsUiState
 
-    data object Content : AssetsUiState
+    data class Content(
+        val total: String,
+        val deltaText: String,
+        val isGain: Boolean,
+        val summary: String,
+    ) : AssetsUiState
 }

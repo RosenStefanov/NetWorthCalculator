@@ -40,4 +40,17 @@ class Navigator(val topLevelRoutes: List<NavKey>) {
             currentBackStack.removeLastOrNull()
         }
     }
+
+    fun snapshotBackStacks(): List<List<NavKey>> =
+        topLevelRoutes.map { route -> tabBackStacks.getValue(route).toList() }
+
+    fun restore(currentTabIndex: Int, backStacks: List<List<NavKey>>) {
+        backStacks.forEachIndexed { index, savedStack ->
+            val route = topLevelRoutes.getOrNull(index) ?: return@forEachIndexed
+            val target = tabBackStacks.getValue(route)
+            target.clear()
+            target.addAll(savedStack.ifEmpty { listOf(route) })
+        }
+        currentTab = topLevelRoutes.getOrElse(currentTabIndex) { topLevelRoutes.first() }
+    }
 }
