@@ -31,9 +31,11 @@ import androidx.compose.ui.unit.em
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.rosenstefanov.networthcalculator.core.ui.component.AssetsVsLiabilitiesCard
+import com.rosenstefanov.networthcalculator.core.ui.component.compactNumber
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthCard
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthDeltaPill
 import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthTopAppBar
+import com.rosenstefanov.networthcalculator.core.ui.component.NetWorthTopBarIconButton
 import com.rosenstefanov.networthcalculator.core.ui.models.HoldingType
 import com.rosenstefanov.networthcalculator.core.ui.models.TopHolding
 import com.rosenstefanov.networthcalculator.core.ui.component.TopHoldingsCard
@@ -74,11 +76,8 @@ internal fun DashboardScreen(
     Scaffold(
         topBar = {
             NetWorthTopAppBar(
-                actionIcon = NetWorthIcons.SettingsGear,
-                actionContentDescription = "Settings",
-                onActionClick = { onIntent(DashboardIntent.SettingsClicked) },
                 leading = {
-                    Column{
+                    Column {
                         Text(
                             text = "Hello",
                             style = MaterialTheme.typography.bodyMedium,
@@ -88,7 +87,13 @@ internal fun DashboardScreen(
                             style = MaterialTheme.typography.headlineSmall,
                         )
                     }
-
+                },
+                actions = {
+                    NetWorthTopBarIconButton(
+                        icon = NetWorthIcons.SettingsGear,
+                        contentDescription = "Settings",
+                        onClick = { onIntent(DashboardIntent.SettingsClicked) },
+                    )
                 },
             )
         },
@@ -150,6 +155,7 @@ private fun DashboardContent(
             ranges = state.ranges,
             selectedRange = state.selectedRange,
             onRangeSelected = { onIntent(DashboardIntent.RangeSelected(it)) },
+            formatAxisLabel = { value -> "€" + compactNumber(value) },
         )
 
         TopHoldingsCard(
@@ -235,8 +241,8 @@ private fun previewContent() = DashboardUiState.Content(
     liabilitiesTotal = Money(BigDecimal("15700.00"), "EUR"),
     assetsWeight = 0.787f,
     trend = DashboardUiState.NetWorthTrend(
-        assets = listOf(.321f, .306f, .292f, .297f, .275f, .257f, .262f, .243f, .228f, .221f, .206f, .194f),
-        liabilities = listOf(.858f, .861f, .866f, .863f, .870f, .873f, .875f, .880f, .883f, .885f, .887f, .889f),
+        assets = listOf(48_000f, 49_500f, 50_800f, 51_600f, 52_900f, 53_700f, 54_800f, 55_500f, 56_400f, 57_100f, 57_700f, 58_200f),
+        liabilities = listOf(15_000f, 15_100f, 15_200f, 15_300f, 15_400f, 15_450f, 15_500f, 15_550f, 15_600f, 15_650f, 15_680f, 15_700f),
         monthLabels = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun"),
     ),
     ranges = listOf("1M", "6M", "1Y", "All"),

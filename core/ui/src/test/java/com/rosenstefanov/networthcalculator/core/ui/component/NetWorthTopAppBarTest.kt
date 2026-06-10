@@ -8,27 +8,37 @@ import org.junit.Test
 class NetWorthTopAppBarTest : ScreenSnapshotTest() {
 
     @Test
-    fun topAppBar_light() = captureSnapshot {
+    fun topAppBar_titleAndAction_light() = captureSnapshot {
         NetWorthTopAppBar(
-            actionIcon = NetWorthIcons.SettingsGear,
-            actionContentDescription = "Settings",
             leading = { Text("Net Worth Calculator") },
+            actions = {
+                NetWorthTopBarIconButton(
+                    icon = NetWorthIcons.SettingsGear,
+                    contentDescription = "Settings",
+                    onClick = {},
+                )
+            },
         )
     }
 
-    // Dark theme makes the surface dark, exercising the light-hairline border branch.
+    // Dark surface → neutral button uses the hairline-border branch.
     @Test
-    fun topAppBar_dark() = captureSnapshot(darkTheme = true) {
+    fun topAppBar_titleAndAction_dark() = captureSnapshot(darkTheme = true) {
         NetWorthTopAppBar(
-            actionIcon = NetWorthIcons.SettingsGear,
-            actionContentDescription = "Settings",
             leading = { Text("Net Worth Calculator") },
+            actions = {
+                NetWorthTopBarIconButton(
+                    icon = NetWorthIcons.SettingsGear,
+                    contentDescription = "Settings",
+                    onClick = {},
+                )
+            },
         )
     }
 
-    // No action icon — covers the null-action branch (left slot only).
+    // Leading only — empty actions slot.
     @Test
-    fun topAppBar_noAction() = captureSnapshot {
+    fun topAppBar_leadingOnly() = captureSnapshot {
         NetWorthTopAppBar(
             leading = { Text("Net Worth Calculator") },
         )

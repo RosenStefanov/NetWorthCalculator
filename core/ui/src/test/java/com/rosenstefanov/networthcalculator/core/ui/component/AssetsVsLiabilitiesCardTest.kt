@@ -9,9 +9,9 @@ import org.junit.Test
 class AssetsVsLiabilitiesCardTest : ScreenSnapshotTest() {
 
     private val assetsTrend =
-        listOf(.321f, .306f, .292f, .297f, .275f, .257f, .262f, .243f, .228f, .221f, .206f, .194f)
+        listOf(358_000f, 362_000f, 368_000f, 374_000f, 382_000f, 389_000f, 394_000f, 399_000f, 404_000f, 408_000f, 411_000f, 412_300f)
     private val liabilitiesTrend =
-        listOf(.858f, .861f, .866f, .863f, .870f, .873f, .875f, .880f, .883f, .885f, .887f, .889f)
+        listOf(124_000f, 124_500f, 125_000f, 125_500f, 126_000f, 126_400f, 126_700f, 127_000f, 127_200f, 127_350f, 127_450f, 127_550f)
     private val months = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun")
 
     private val card = @androidx.compose.runtime.Composable {

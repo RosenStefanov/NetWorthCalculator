@@ -72,6 +72,7 @@ class DashboardViewModelTest {
         assertThat(content.selectedRange).isEqualTo("1Y")
         assertThat(content.ranges).containsExactly("1M", "6M", "1Y", "All").inOrder()
         assertThat(content.trend.assets).hasSize(12)
+        assertThat(content.trend.assets.last()).isEqualTo(58_200f)
         assertThat(content.trend.monthLabels).containsExactly("Jul", "Sep", "Nov", "Jan", "Mar", "Jun").inOrder()
     }
 
