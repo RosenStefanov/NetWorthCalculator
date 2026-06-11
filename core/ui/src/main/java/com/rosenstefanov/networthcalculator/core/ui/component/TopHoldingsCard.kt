@@ -59,9 +59,32 @@ fun TopHoldingsCard(
                 modifier = Modifier.padding(vertical = 11.dp),
             )
         } else {
+            val isAssets = selectedType == HoldingType.Assets
+            val accent = if (isAssets) {
+                NetWorthTheme.extendedColors.assets
+            } else {
+                NetWorthTheme.extendedColors.liabilities
+            }
+            val chip = if (isAssets) {
+                NetWorthTheme.extendedColors.assetsTint
+            } else {
+                NetWorthTheme.extendedColors.liabilitiesTint
+            }
             val maxAmount = items.maxOf { it.amount }
             items.forEach { holding ->
-                HoldingRowItem(item = holding, maxAmount = maxAmount, type = selectedType)
+                HoldingRowItem(
+                    iconRes = holding.iconRes,
+                    name = holding.name,
+                    category = holding.category,
+                    amountLabel = holding.amountLabel,
+                    barFraction = if (maxAmount > 0L) {
+                        (holding.amount.toFloat() / maxAmount).coerceIn(0f, 1f)
+                    } else {
+                        0f
+                    },
+                    accentColor = accent,
+                    chipColor = chip,
+                )
             }
         }
     }

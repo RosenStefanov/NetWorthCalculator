@@ -1,5 +1,6 @@
 package com.rosenstefanov.networthcalculator.core.ui.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,46 +21,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.rosenstefanov.networthcalculator.core.ui.models.HoldingType
-import com.rosenstefanov.networthcalculator.core.ui.models.TopHolding
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 import com.rosenstefanov.networthcalculator.core.ui.theme.SpaceGrotesk
 
 @Composable
 internal fun HoldingRowItem(
-    item: TopHolding,
-    maxAmount: Long,
-    type: HoldingType,
+    @DrawableRes iconRes: Int,
+    name: String,
+    category: String,
+    amountLabel: String,
+    barFraction: Float,
+    accentColor: Color,
+    chipColor: Color,
+    modifier: Modifier = Modifier,
+    subtitle: String? = null,
 ) {
-    val isAssets = type == HoldingType.Assets
-    val accent = if (isAssets) {
-        NetWorthTheme.extendedColors.assets
-    } else {
-        NetWorthTheme.extendedColors.liabilities
-    }
-    val chipBg = if (isAssets) {
-        NetWorthTheme.extendedColors.assetsTint
-    } else {
-        NetWorthTheme.extendedColors.liabilitiesTint
-    }
-    val fraction = if (maxAmount > 0L) {
-        (item.amount.toFloat() / maxAmount).coerceIn(0f, 1f)
-    } else {
-        0f
-    }
-
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 44.dp)
-            .padding(horizontal = 2.dp, vertical = 11.dp),
+            .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(13.dp),
     ) {
@@ -67,20 +56,20 @@ internal fun HoldingRowItem(
             modifier = Modifier
                 .size(42.dp)
                 .clip(RoundedCornerShape(13.dp))
-                .background(chipBg),
+                .background(chipColor),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = painterResource(item.iconRes),
+                painter = painterResource(iconRes),
                 contentDescription = null,
-                tint = accent,
+                tint = accentColor,
                 modifier = Modifier.size(21.dp),
             )
         }
 
         Column(Modifier.weight(1f)) {
             Text(
-                text = item.name,
+                text = name,
                 fontFamily = JakartaSans,
                 fontSize = 14.5.sp,
                 fontWeight = FontWeight.W600,
@@ -91,7 +80,7 @@ internal fun HoldingRowItem(
             )
             Spacer(Modifier.height(1.dp))
             Text(
-                text = item.category,
+                text = category,
                 fontFamily = JakartaSans,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
@@ -107,21 +96,33 @@ internal fun HoldingRowItem(
             ) {
                 Box(
                     Modifier
-                        .fillMaxWidth(fraction)
+                        .fillMaxWidth(barFraction)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(3.dp))
-                        .background(accent),
+                        .background(accentColor),
                 )
             }
         }
 
-        Text(
-            text = item.amountLabel,
-            fontFamily = SpaceGrotesk,
-            fontSize = 14.5.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 1,
-        )
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = amountLabel,
+                fontFamily = SpaceGrotesk,
+                fontSize = 14.5.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+            )
+            if (subtitle != null) {
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    text = subtitle,
+                    fontFamily = JakartaSans,
+                    fontSize = 11.5.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = NetWorthTheme.extendedColors.inkSub,
+                )
+            }
+        }
     }
 }

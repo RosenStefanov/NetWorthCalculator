@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,16 +15,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun NetWorthSurfaceCard(
     modifier: Modifier = Modifier,
+    cornerRadius: Dp = 24.dp,
+    contentPadding: PaddingValues = PaddingValues(20.dp),
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val surface = MaterialTheme.colorScheme.surface
     val isDark = surface.luminance() < 0.5f
-    val shape = RoundedCornerShape(24.dp)
+    val shape = RoundedCornerShape(cornerRadius)
 
     val shaped = if (isDark) {
         Modifier
@@ -41,7 +45,7 @@ fun NetWorthSurfaceCard(
         modifier = modifier
             .fillMaxWidth()
             .then(shaped)
-            .padding(20.dp),
+            .padding(contentPadding),
         content = content,
     )
 }

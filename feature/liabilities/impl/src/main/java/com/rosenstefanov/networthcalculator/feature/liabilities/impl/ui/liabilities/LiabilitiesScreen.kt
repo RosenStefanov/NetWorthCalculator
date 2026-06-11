@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -17,8 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.rosenstefanov.networthcalculator.core.ui.component.AllocationCard
+import com.rosenstefanov.networthcalculator.core.ui.component.RankedListSection
 import com.rosenstefanov.networthcalculator.core.ui.component.SectionTopBar
 import com.rosenstefanov.networthcalculator.core.ui.component.TotalCard
+import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
+import com.rosenstefanov.networthcalculator.core.ui.models.AllocItem
+import com.rosenstefanov.networthcalculator.core.ui.models.Holding
+import com.rosenstefanov.networthcalculator.core.ui.models.SortMode
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthLiabilitiesBrush
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesEffect
@@ -79,6 +87,7 @@ internal fun LiabilitiesScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 22.dp, vertical = 16.dp),
             ) {
                 TotalCard(
@@ -89,6 +98,19 @@ internal fun LiabilitiesScreen(
                     count = uiState.summary,
                     gradient = accentGradient,
                     glow = accentGlow,
+                    modifier = Modifier.padding(bottom = 18.dp),
+                )
+                AllocationCard(
+                    items = uiState.allocation,
+                    total = uiState.allocationTotal,
+                    modifier = Modifier.padding(bottom = 18.dp),
+                )
+                RankedListSection(
+                    title = "All liabilities",
+                    holdings = uiState.holdings,
+                    total = uiState.holdingsTotal,
+                    sort = uiState.selectedSort,
+                    onSort = { onIntent(LiabilitiesIntent.SortSelected(it)) },
                 )
             }
         }
@@ -105,6 +127,21 @@ internal fun LiabilitiesScreenContentPreview() {
                 deltaText = "−1.8%",
                 isGain = false,
                 summary = "4 debts · 4 categories",
+                allocationTotal = 127_550L,
+                allocation = listOf(
+                    AllocItem("Property", Color(0xFF7C3AED), 108_200L),
+                    AllocItem("Vehicle", Color(0xFF9333EA), 12_300L),
+                    AllocItem("Revolving", Color(0xFFA855F7), 4_850L),
+                    AllocItem("Education", Color(0xFFC026D3), 2_200L),
+                ),
+                holdingsTotal = 127_550L,
+                selectedSort = SortMode.Largest,
+                holdings = listOf(
+                    Holding("Mortgage", "Property", 108_200L, Color(0xFF7C3AED), NetWorthIcons.Home),
+                    Holding("Auto Loan", "Vehicle", 12_300L, Color(0xFF9333EA), NetWorthIcons.Car),
+                    Holding("Credit Cards", "Revolving", 4_850L, Color(0xFFA855F7), NetWorthIcons.LiabilitiesCard),
+                    Holding("Student Loan", "Education", 2_200L, Color(0xFFC026D3), NetWorthIcons.Document),
+                ),
             ),
             onIntent = {},
         )

@@ -3,6 +3,7 @@ package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabili
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.rosenstefanov.networthcalculator.core.testing.MainDispatcherExtension
+import com.rosenstefanov.networthcalculator.core.ui.models.SortMode
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesEffect
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesIntent
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesUiState
@@ -37,6 +38,27 @@ class LiabilitiesViewModelTest {
         assertThat(content.deltaText).isEqualTo("−1.8%")
         assertThat(content.isGain).isFalse()
         assertThat(content.summary).isEqualTo("4 debts · 4 categories")
+        assertThat(content.allocationTotal).isEqualTo(127_550L)
+        assertThat(content.allocation.map { it.name })
+            .containsExactly("Property", "Vehicle", "Revolving", "Education")
+            .inOrder()
+        assertThat(content.holdings).hasSize(4)
+        assertThat(content.holdingsTotal).isEqualTo(127_550L)
+        assertThat(content.selectedSort).isEqualTo(SortMode.Largest)
+    }
+
+    @Test
+    fun `SortSelected updates the selected sort`() = runTest(testDispatcher) {
+        val viewModel = LiabilitiesViewModel()
+        advanceUntilIdle()
+        val before = viewModel.uiState.value as LiabilitiesUiState.Content
+
+        viewModel.onIntent(LiabilitiesIntent.SortSelected(SortMode.Name))
+        advanceUntilIdle()
+
+        val after = viewModel.uiState.value as LiabilitiesUiState.Content
+        assertThat(after.selectedSort).isEqualTo(SortMode.Name)
+        assertThat(after).isEqualTo(before.copy(selectedSort = SortMode.Name))
     }
 
     @Test
