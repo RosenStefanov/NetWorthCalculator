@@ -20,6 +20,8 @@ class KindBannerTest : ScreenSnapshotTest() {
             title = "New asset",
             subtitle = "Something you own",
             icon = NetWorthIcons.ChartUp,
+            amount = "$58,400",
+            amountLabel = "VALUE",
             gradient = NetWorthBrandBrush,
             glow = Color(0xFF5B45F5).copy(alpha = 0.6f),
             modifier = Modifier
@@ -34,6 +36,8 @@ class KindBannerTest : ScreenSnapshotTest() {
             title = "New liability",
             subtitle = "Something you owe",
             icon = NetWorthIcons.Scale,
+            amount = "$12,300",
+            amountLabel = "OWED",
             gradient = NetWorthLiabilitiesBrush,
             glow = Color(0xFF9333EA).copy(alpha = 0.6f),
             modifier = Modifier

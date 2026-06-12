@@ -29,6 +29,7 @@ dependencies {
     // Navigation 3
     implementation(libs.navigation3.runtime)
     implementation(libs.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.hilt.navigation.compose)
 
     // Core

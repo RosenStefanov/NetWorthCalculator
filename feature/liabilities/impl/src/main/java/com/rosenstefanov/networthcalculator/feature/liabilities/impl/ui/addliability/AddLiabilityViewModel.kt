@@ -2,6 +2,7 @@ package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliab
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rosenstefanov.networthcalculator.core.common.CurrencyFormatter
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliability.models.AddLiabilityEffect
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliability.models.AddLiabilityIntent
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliability.models.AddLiabilityUiState
@@ -16,7 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddLiabilityViewModel @Inject constructor() : ViewModel() {
+class AddLiabilityViewModel @Inject constructor(
+    private val currencyFormatter: CurrencyFormatter,
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AddLiabilityUiState>(AddLiabilityUiState.Content())
     val uiState: StateFlow<AddLiabilityUiState> = _uiState.asStateFlow()
@@ -30,6 +33,24 @@ class AddLiabilityViewModel @Inject constructor() : ViewModel() {
                 val current = _uiState.value
                 if (current is AddLiabilityUiState.Content) {
                     _uiState.value = current.copy(name = intent.name)
+                }
+            }
+            is AddLiabilityIntent.AmountChanged -> {
+                val current = _uiState.value
+                if (current is AddLiabilityUiState.Content) {
+                    _uiState.value = current.copy(amount = currencyFormatter.format(intent.amount))
+                }
+            }
+            is AddLiabilityIntent.CategorySelected -> {
+                val current = _uiState.value
+                if (current is AddLiabilityUiState.Content) {
+                    _uiState.value = current.copy(category = intent.category)
+                }
+            }
+            is AddLiabilityIntent.DescriptionChanged -> {
+                val current = _uiState.value
+                if (current is AddLiabilityUiState.Content) {
+                    _uiState.value = current.copy(description = intent.description)
                 }
             }
             AddLiabilityIntent.SaveClicked -> emitEffect(AddLiabilityEffect.NavigateBack)

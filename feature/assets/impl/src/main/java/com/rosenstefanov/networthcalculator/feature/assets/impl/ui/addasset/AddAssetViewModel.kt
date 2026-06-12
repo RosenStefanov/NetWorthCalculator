@@ -2,6 +2,7 @@ package com.rosenstefanov.networthcalculator.feature.assets.impl.ui.addasset
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rosenstefanov.networthcalculator.core.common.CurrencyFormatter
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.addasset.models.AddAssetEffect
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.addasset.models.AddAssetIntent
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.addasset.models.AddAssetUiState
@@ -16,7 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddAssetViewModel @Inject constructor() : ViewModel() {
+class AddAssetViewModel @Inject constructor(
+    private val currencyFormatter: CurrencyFormatter,
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AddAssetUiState>(AddAssetUiState.Content())
     val uiState: StateFlow<AddAssetUiState> = _uiState.asStateFlow()
@@ -30,6 +33,24 @@ class AddAssetViewModel @Inject constructor() : ViewModel() {
                 val current = _uiState.value
                 if (current is AddAssetUiState.Content) {
                     _uiState.value = current.copy(name = intent.name)
+                }
+            }
+            is AddAssetIntent.AmountChanged -> {
+                val current = _uiState.value
+                if (current is AddAssetUiState.Content) {
+                    _uiState.value = current.copy(amount = currencyFormatter.format(intent.amount))
+                }
+            }
+            is AddAssetIntent.CategorySelected -> {
+                val current = _uiState.value
+                if (current is AddAssetUiState.Content) {
+                    _uiState.value = current.copy(category = intent.category)
+                }
+            }
+            is AddAssetIntent.DescriptionChanged -> {
+                val current = _uiState.value
+                if (current is AddAssetUiState.Content) {
+                    _uiState.value = current.copy(description = intent.description)
                 }
             }
             AddAssetIntent.SaveClicked -> emitEffect(AddAssetEffect.NavigateBack)

@@ -88,7 +88,7 @@ internal fun LiabilitiesScreen(
                     .fillMaxSize()
                     .padding(padding)
                     .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 22.dp, vertical = 16.dp),
+                    .padding(start = 22.dp, end = 22.dp, top = 16.dp, bottom = 104.dp),
             ) {
                 TotalCard(
                     label = "Total Liabilities",
