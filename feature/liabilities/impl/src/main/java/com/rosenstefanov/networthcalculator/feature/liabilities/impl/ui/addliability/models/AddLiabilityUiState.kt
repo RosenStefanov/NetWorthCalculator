@@ -2,5 +2,6 @@ package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliab
 
 sealed interface AddLiabilityUiState {
 
-    data object Content : AddLiabilityUiState
+    // Placeholder form state — only the name field exists so far; more inputs come in a later chunk.
+    data class Content(val name: String = "") : AddLiabilityUiState
 }

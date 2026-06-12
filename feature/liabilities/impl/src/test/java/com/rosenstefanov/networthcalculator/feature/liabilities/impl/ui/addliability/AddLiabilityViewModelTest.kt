@@ -23,9 +23,16 @@ class AddLiabilityViewModelTest {
     val mainDispatcherExtension = MainDispatcherExtension(testDispatcher)
 
     @Test
-    fun `initial state is Content`() = runTest(testDispatcher) {
+    fun `initial state is empty Content`() = runTest(testDispatcher) {
         val viewModel = AddLiabilityViewModel()
-        assertThat(viewModel.uiState.value).isEqualTo(AddLiabilityUiState.Content)
+        assertThat(viewModel.uiState.value).isEqualTo(AddLiabilityUiState.Content(name = ""))
+    }
+
+    @Test
+    fun `NameChanged updates the name`() = runTest(testDispatcher) {
+        val viewModel = AddLiabilityViewModel()
+        viewModel.onIntent(AddLiabilityIntent.NameChanged("Mortgage"))
+        assertThat((viewModel.uiState.value as AddLiabilityUiState.Content).name).isEqualTo("Mortgage")
     }
 
     @Test

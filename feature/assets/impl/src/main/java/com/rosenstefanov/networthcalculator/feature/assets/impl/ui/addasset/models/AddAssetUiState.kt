@@ -2,5 +2,6 @@ package com.rosenstefanov.networthcalculator.feature.assets.impl.ui.addasset.mod
 
 sealed interface AddAssetUiState {
 
-    data object Content : AddAssetUiState
+    // Placeholder form state — only the name field exists so far; more inputs come in a later chunk.
+    data class Content(val name: String = "") : AddAssetUiState
 }
