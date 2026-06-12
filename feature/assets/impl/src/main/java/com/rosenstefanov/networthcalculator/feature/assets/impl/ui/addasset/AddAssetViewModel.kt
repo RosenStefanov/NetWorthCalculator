@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddAssetViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState = MutableStateFlow<AddAssetUiState>(AddAssetUiState.Content)
+    private val _uiState = MutableStateFlow<AddAssetUiState>(AddAssetUiState.Content())
     val uiState: StateFlow<AddAssetUiState> = _uiState.asStateFlow()
 
     private val _effects = Channel<AddAssetEffect>(Channel.BUFFERED)
@@ -26,6 +26,12 @@ class AddAssetViewModel @Inject constructor() : ViewModel() {
 
     fun onIntent(intent: AddAssetIntent) {
         when (intent) {
+            is AddAssetIntent.NameChanged -> {
+                val current = _uiState.value
+                if (current is AddAssetUiState.Content) {
+                    _uiState.value = current.copy(name = intent.name)
+                }
+            }
             AddAssetIntent.SaveClicked -> emitEffect(AddAssetEffect.NavigateBack)
             AddAssetIntent.CloseClicked -> emitEffect(AddAssetEffect.NavigateBack)
         }

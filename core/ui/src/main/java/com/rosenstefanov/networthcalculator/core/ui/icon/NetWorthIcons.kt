@@ -13,6 +13,7 @@ object NetWorthIcons {
     @DrawableRes val Cash = R.drawable.ic_cash
     @DrawableRes val ChartUp = R.drawable.ic_chart_up
     @DrawableRes val ChevronDown = R.drawable.ic_chevron_down
+    @DrawableRes val ChevronLeft = R.drawable.ic_chevron_left
     @DrawableRes val ChevronRight = R.drawable.ic_chevron_right
     @DrawableRes val Dashboard = R.drawable.ic_dashboard
     @DrawableRes val Document = R.drawable.ic_document
@@ -22,6 +23,7 @@ object NetWorthIcons {
     @DrawableRes val LiabilitiesCard = R.drawable.ic_liabilities_card
     @DrawableRes val Person = R.drawable.ic_person
     @DrawableRes val Plus = R.drawable.ic_plus
+    @DrawableRes val Scale = R.drawable.ic_scale
     @DrawableRes val SettingsGear = R.drawable.ic_settings_gear
     @DrawableRes val Wifi = R.drawable.ic_wifi
 }

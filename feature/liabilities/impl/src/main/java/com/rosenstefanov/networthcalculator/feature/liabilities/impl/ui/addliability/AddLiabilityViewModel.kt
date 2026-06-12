@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddLiabilityViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState = MutableStateFlow<AddLiabilityUiState>(AddLiabilityUiState.Content)
+    private val _uiState = MutableStateFlow<AddLiabilityUiState>(AddLiabilityUiState.Content())
     val uiState: StateFlow<AddLiabilityUiState> = _uiState.asStateFlow()
 
     private val _effects = Channel<AddLiabilityEffect>(Channel.BUFFERED)
@@ -26,6 +26,12 @@ class AddLiabilityViewModel @Inject constructor() : ViewModel() {
 
     fun onIntent(intent: AddLiabilityIntent) {
         when (intent) {
+            is AddLiabilityIntent.NameChanged -> {
+                val current = _uiState.value
+                if (current is AddLiabilityUiState.Content) {
+                    _uiState.value = current.copy(name = intent.name)
+                }
+            }
             AddLiabilityIntent.SaveClicked -> emitEffect(AddLiabilityEffect.NavigateBack)
             AddLiabilityIntent.CloseClicked -> emitEffect(AddLiabilityEffect.NavigateBack)
         }
