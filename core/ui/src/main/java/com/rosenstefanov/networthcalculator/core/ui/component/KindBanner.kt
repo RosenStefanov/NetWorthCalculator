@@ -23,20 +23,32 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthLiabilitiesBrush
+import com.rosenstefanov.networthcalculator.core.ui.theme.SpaceGrotesk
 
+/**
+ * Gradient banner that previews the holding being added: an icon tile, a growing text block
+ * (title/subtitle), and a right-aligned amount block. The [amount] mirrors the balance field live
+ * (pass it already formatted, e.g. "$58,400" or "$0"), with [amountLabel] like "VALUE"/"OWED". The
+ * text block truncates before the amount, so the figure stays fully visible. Per-screen difference
+ * is just the text, [icon], [gradient] and [glow].
+ */
 @Composable
 fun KindBanner(
     title: String,
     subtitle: String,
     @DrawableRes icon: Int,
+    amount: String,
+    amountLabel: String,
     gradient: Brush,
     glow: Color,
     modifier: Modifier = Modifier,
@@ -61,6 +73,7 @@ fun KindBanner(
             horizontalArrangement = Arrangement.spacedBy(13.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // Slot 1 — icon tile.
             Box(
                 modifier = Modifier
                     .size(46.dp)
@@ -75,20 +88,49 @@ fun KindBanner(
                     modifier = Modifier.size(24.dp),
                 )
             }
-            Column {
+
+            // Slot 2 — text block (grows, truncates before the amount).
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     fontFamily = JakartaSans,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = subtitle,
                     fontFamily = JakartaSans,
                     fontSize = 12.sp,
                     color = Color.White.copy(alpha = 0.85f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(top = 1.dp),
+                )
+            }
+
+            // Slot 3 — amount block (fixed width, always fully visible).
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = amount,
+                    fontFamily = SpaceGrotesk,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    lineHeight = 24.sp,
+                    letterSpacing = (-0.02).em,
+                    color = Color.White,
+                    maxLines = 1,
+                )
+                Text(
+                    text = amountLabel.uppercase(),
+                    fontFamily = JakartaSans,
+                    fontSize = 10.5.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = 0.04.em,
+                    color = Color.White.copy(alpha = 0.8f),
+                    modifier = Modifier.padding(top = 4.dp),
                 )
             }
         }
@@ -103,6 +145,8 @@ internal fun KindBannerAssetPreview() {
             title = "New asset",
             subtitle = "Something you own",
             icon = NetWorthIcons.ChartUp,
+            amount = "$58,400",
+            amountLabel = "VALUE",
             gradient = NetWorthBrandBrush,
             glow = Color(0xFF5B45F5).copy(alpha = 0.6f),
             modifier = Modifier.padding(16.dp),
@@ -118,6 +162,8 @@ internal fun KindBannerLiabilityPreview() {
             title = "New liability",
             subtitle = "Something you owe",
             icon = NetWorthIcons.Scale,
+            amount = "$12,300",
+            amountLabel = "OWED",
             gradient = NetWorthLiabilitiesBrush,
             glow = Color(0xFF9333EA).copy(alpha = 0.6f),
             modifier = Modifier.padding(16.dp),

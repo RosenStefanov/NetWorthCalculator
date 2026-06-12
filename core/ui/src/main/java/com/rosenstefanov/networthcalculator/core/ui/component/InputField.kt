@@ -4,12 +4,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +28,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
@@ -42,6 +47,22 @@ fun InputField(
     accentColor: Color,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    height: Dp = 54.dp,
+    textStyle: TextStyle = TextStyle(
+        fontFamily = JakartaSans,
+        fontSize = 15.sp,
+        fontWeight = FontWeight.SemiBold,
+        color = MaterialTheme.colorScheme.onSurface,
+    ),
+    placeholderStyle: TextStyle = TextStyle(
+        fontFamily = JakartaSans,
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Medium,
+        color = PlaceholderColor,
+    ),
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    leading: (@Composable () -> Unit)? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
@@ -53,17 +74,14 @@ fun InputField(
         singleLine = true,
         interactionSource = interactionSource,
         cursorBrush = SolidColor(accentColor),
-        textStyle = TextStyle(
-            fontFamily = JakartaSans,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-        ),
+        textStyle = textStyle,
+        keyboardOptions = keyboardOptions,
+        visualTransformation = visualTransformation,
         decorationBox = { inner ->
-            Box(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(54.dp)
+                    .height(height)
                     .clip(FieldShape)
                     .background(MaterialTheme.colorScheme.surface)
                     .border(
@@ -85,18 +103,19 @@ fun InputField(
                         },
                     )
                     .padding(horizontal = 16.dp),
-                contentAlignment = Alignment.CenterStart,
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                if (value.isEmpty()) {
-                    Text(
-                        text = placeholder,
-                        fontFamily = JakartaSans,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = PlaceholderColor,
-                    )
+                leading?.invoke()
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.CenterStart,
+                ) {
+                    if (value.isEmpty()) {
+                        Text(text = placeholder, style = placeholderStyle)
+                    }
+                    inner()
                 }
-                inner()
             }
         },
     )

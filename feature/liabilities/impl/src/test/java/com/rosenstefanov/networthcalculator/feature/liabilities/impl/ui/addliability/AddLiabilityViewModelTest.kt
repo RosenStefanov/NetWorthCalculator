@@ -2,7 +2,9 @@ package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliab
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import com.rosenstefanov.networthcalculator.core.common.CurrencyFormatter
 import com.rosenstefanov.networthcalculator.core.testing.MainDispatcherExtension
+import com.rosenstefanov.networthcalculator.core.ui.models.LiabilityCategories
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliability.models.AddLiabilityEffect
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliability.models.AddLiabilityIntent
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.addliability.models.AddLiabilityUiState
@@ -24,20 +26,43 @@ class AddLiabilityViewModelTest {
 
     @Test
     fun `initial state is empty Content`() = runTest(testDispatcher) {
-        val viewModel = AddLiabilityViewModel()
+        val viewModel = AddLiabilityViewModel(CurrencyFormatter())
         assertThat(viewModel.uiState.value).isEqualTo(AddLiabilityUiState.Content(name = ""))
     }
 
     @Test
     fun `NameChanged updates the name`() = runTest(testDispatcher) {
-        val viewModel = AddLiabilityViewModel()
+        val viewModel = AddLiabilityViewModel(CurrencyFormatter())
         viewModel.onIntent(AddLiabilityIntent.NameChanged("Mortgage"))
         assertThat((viewModel.uiState.value as AddLiabilityUiState.Content).name).isEqualTo("Mortgage")
     }
 
     @Test
+    fun `AmountChanged formats the amount`() = runTest(testDispatcher) {
+        val viewModel = AddLiabilityViewModel(CurrencyFormatter())
+        viewModel.onIntent(AddLiabilityIntent.AmountChanged("12300"))
+        assertThat((viewModel.uiState.value as AddLiabilityUiState.Content).amount).isEqualTo("12,300")
+    }
+
+    @Test
+    fun `CategorySelected updates the category`() = runTest(testDispatcher) {
+        val viewModel = AddLiabilityViewModel(CurrencyFormatter())
+        val target = LiabilityCategories.last()
+        viewModel.onIntent(AddLiabilityIntent.CategorySelected(target))
+        assertThat((viewModel.uiState.value as AddLiabilityUiState.Content).category).isEqualTo(target)
+    }
+
+    @Test
+    fun `DescriptionChanged updates the description`() = runTest(testDispatcher) {
+        val viewModel = AddLiabilityViewModel(CurrencyFormatter())
+        viewModel.onIntent(AddLiabilityIntent.DescriptionChanged("Fixed rate 4.2%"))
+        assertThat((viewModel.uiState.value as AddLiabilityUiState.Content).description)
+            .isEqualTo("Fixed rate 4.2%")
+    }
+
+    @Test
     fun `SaveClicked emits NavigateBack`() = runTest(testDispatcher) {
-        val viewModel = AddLiabilityViewModel()
+        val viewModel = AddLiabilityViewModel(CurrencyFormatter())
         viewModel.effects.test {
             viewModel.onIntent(AddLiabilityIntent.SaveClicked)
             advanceUntilIdle()
@@ -48,7 +73,7 @@ class AddLiabilityViewModelTest {
 
     @Test
     fun `CloseClicked emits NavigateBack`() = runTest(testDispatcher) {
-        val viewModel = AddLiabilityViewModel()
+        val viewModel = AddLiabilityViewModel(CurrencyFormatter())
         viewModel.effects.test {
             viewModel.onIntent(AddLiabilityIntent.CloseClicked)
             advanceUntilIdle()
