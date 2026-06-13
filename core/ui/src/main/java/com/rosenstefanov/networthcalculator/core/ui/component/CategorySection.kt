@@ -32,7 +32,6 @@ import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorThem
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
 private val ChipShape = RoundedCornerShape(12.dp)
-private val RestBorderColor = Color(0xFFE8E9F1)
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -81,7 +80,7 @@ private fun CategoryChip(
             .background(if (selected) accent.copy(alpha = 0.07f) else MaterialTheme.colorScheme.surface)
             .border(
                 width = 1.5.dp,
-                color = if (selected) accent else RestBorderColor,
+                color = if (selected) accent else NetWorthTheme.extendedColors.line,
                 shape = ChipShape,
             )
             .clickable(onClick = onClick)

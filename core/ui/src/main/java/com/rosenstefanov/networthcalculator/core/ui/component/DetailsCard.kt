@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,8 +24,6 @@ import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
-private val DividerColor = Color(0xFFF1F2F8)
-private val DescriptionColor = Color(0xFF444A63)
 
 @Composable
 fun DetailsCard(
@@ -55,7 +52,7 @@ fun DetailsCard(
         rows.forEachIndexed { index, (key, value) ->
             InfoRow(key = key, value = value)
             if (index != rows.lastIndex) {
-                HorizontalDivider(thickness = 1.dp, color = DividerColor)
+                HorizontalDivider(thickness = 1.dp, color = NetWorthTheme.extendedColors.lineSoft)
             }
         }
 
@@ -74,7 +71,7 @@ fun DetailsCard(
                     fontFamily = JakartaSans,
                     fontSize = 13.5.sp,
                     fontWeight = FontWeight.Medium,
-                    color = DescriptionColor,
+                    color = NetWorthTheme.extendedColors.inkSub,
                     lineHeight = 20.25.sp,
                 )
             }

@@ -29,6 +29,7 @@ import com.rosenstefanov.networthcalculator.core.ui.models.Holding
 import com.rosenstefanov.networthcalculator.core.ui.models.SortMode
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets.models.AssetsEffect
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets.models.AssetsIntent
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets.models.AssetsUiState
@@ -61,7 +62,7 @@ internal fun AssetsScreen(
     onIntent: (AssetsIntent) -> Unit,
 ) {
     val accentGradient = NetWorthBrandBrush
-    val accentGlow = Color(0xFF5B45F5).copy(alpha = 0.6f)
+    val accentGlow = NetWorthColors.AssetGlow.copy(alpha = 0.6f)
 
     Scaffold(
         topBar = {

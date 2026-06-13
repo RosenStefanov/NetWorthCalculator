@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
 @Composable
@@ -42,7 +43,7 @@ fun NetWorthSegmentedChips(
             val chipModifier = when {
                 isSelected && !isDark ->
                     Modifier
-                        .shadow(elevation = 3.dp, shape = chipShape, spotColor = ChipShadow, ambientColor = ChipShadow)
+                        .shadow(elevation = 3.dp, shape = chipShape, spotColor = NetWorthColors.Shadow, ambientColor = NetWorthColors.Shadow)
                         .clip(chipShape)
                         .background(selectedBg)
                 isSelected ->
@@ -68,5 +69,3 @@ fun NetWorthSegmentedChips(
         }
     }
 }
-
-private val ChipShadow = Color(0xFF1E1646)

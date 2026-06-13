@@ -21,7 +21,9 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.rosenstefanov.networthcalculator.core.ui.models.FloatingBottomBarItem
+import com.rosenstefanov.networthcalculator.core.ui.theme.DarkSurface
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
 @Composable
@@ -78,8 +80,8 @@ fun FloatingBottomBar(
     }
 }
 
-private val DarkBarColor = Color(0xFF161A36).copy(alpha = 0.85f)
+private val DarkBarColor = DarkSurface.copy(alpha = 0.85f)
 
-private val BarShadowColor = Color(0xFF1E1646).copy(alpha = 0.34f)
+private val BarShadowColor = NetWorthColors.Shadow.copy(alpha = 0.34f)
 
-private val GlowColor = Color(0xFF5B45F5).copy(alpha = 0.70f)
+private val GlowColor = NetWorthColors.AssetGlow.copy(alpha = 0.70f)

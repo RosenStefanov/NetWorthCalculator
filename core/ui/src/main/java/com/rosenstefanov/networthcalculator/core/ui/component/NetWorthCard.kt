@@ -30,9 +30,10 @@ import androidx.compose.ui.unit.sp
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.SpaceGrotesk
 
-val NetWorthCardGlow: Color = Color(0xFF5B45F5).copy(alpha = 0.6f)
+val NetWorthCardGlow: Color = NetWorthColors.AssetGlow.copy(alpha = 0.6f)
 
 @Composable
 fun NetWorthCard(

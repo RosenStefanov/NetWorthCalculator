@@ -1,12 +1,12 @@
 package com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.models.AllocItem
 import com.rosenstefanov.networthcalculator.core.ui.models.Holding
 import com.rosenstefanov.networthcalculator.core.ui.models.SortMode
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets.models.AssetsEffect
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets.models.AssetsIntent
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets.models.AssetsUiState
@@ -59,22 +59,22 @@ class AssetsViewModel @Inject constructor() : ViewModel() {
                 summary = "7 holdings · 5 categories",
                 allocationTotal = 412_300L,
                 allocation = listOf(
-                    AllocItem("Real Estate", Color(0xFF3B6BFF), 312_000L),
-                    AllocItem("Investments", Color(0xFF5B45F5), 58_400L),
-                    AllocItem("Retirement", Color(0xFF7C3AED), 24_500L),
-                    AllocItem("Cash", Color(0xFF8A2EE8), 12_400L),
-                    AllocItem("Vehicles", Color(0xFF9333EA), 5_000L),
+                    AllocItem("Real Estate", NetWorthColors.Blue, 312_000L),
+                    AllocItem("Investments", NetWorthColors.Indigo, 58_400L),
+                    AllocItem("Retirement", NetWorthColors.Violet, 24_500L),
+                    AllocItem("Cash", NetWorthColors.Purple, 12_400L),
+                    AllocItem("Vehicles", NetWorthColors.Grape, 5_000L),
                 ),
                 holdingsTotal = 412_300L,
                 selectedSort = SortMode.Largest,
                 holdings = listOf(
-                    Holding("Primary Residence", "Real Estate", 312_000L, Color(0xFF3B6BFF), NetWorthIcons.Home),
-                    Holding("Brokerage", "Investments", 46_000L, Color(0xFF5B45F5), NetWorthIcons.ChartUp),
-                    Holding("401(k)", "Retirement", 24_500L, Color(0xFF7C3AED), NetWorthIcons.AssetsCoins),
-                    Holding("Crypto Wallet", "Investments", 12_400L, Color(0xFF5B45F5), NetWorthIcons.AssetsCoins),
-                    Holding("Savings", "Cash", 7_400L, Color(0xFF8A2EE8), NetWorthIcons.Cash),
-                    Holding("Checking", "Cash", 5_000L, Color(0xFF8A2EE8), NetWorthIcons.Cash),
-                    Holding("Vehicle", "Vehicles", 5_000L, Color(0xFF9333EA), NetWorthIcons.Car),
+                    Holding("Primary Residence", "Real Estate", 312_000L, NetWorthColors.Blue, NetWorthIcons.Home),
+                    Holding("Brokerage", "Investments", 46_000L, NetWorthColors.Indigo, NetWorthIcons.ChartUp),
+                    Holding("401(k)", "Retirement", 24_500L, NetWorthColors.Violet, NetWorthIcons.AssetsCoins),
+                    Holding("Crypto Wallet", "Investments", 12_400L, NetWorthColors.Indigo, NetWorthIcons.AssetsCoins),
+                    Holding("Savings", "Cash", 7_400L, NetWorthColors.Purple, NetWorthIcons.Cash),
+                    Holding("Checking", "Cash", 5_000L, NetWorthColors.Purple, NetWorthIcons.Cash),
+                    Holding("Vehicle", "Vehicles", 5_000L, NetWorthColors.Grape, NetWorthIcons.Car),
                 ),
             )
         }

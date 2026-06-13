@@ -1,12 +1,12 @@
 package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.models.AllocItem
 import com.rosenstefanov.networthcalculator.core.ui.models.Holding
 import com.rosenstefanov.networthcalculator.core.ui.models.SortMode
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesEffect
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesIntent
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesUiState
@@ -59,18 +59,18 @@ class LiabilitiesViewModel @Inject constructor() : ViewModel() {
                 summary = "4 debts · 4 categories",
                 allocationTotal = 127_550L,
                 allocation = listOf(
-                    AllocItem("Property", Color(0xFF7C3AED), 108_200L),
-                    AllocItem("Vehicle", Color(0xFF9333EA), 12_300L),
-                    AllocItem("Revolving", Color(0xFFA855F7), 4_850L),
-                    AllocItem("Education", Color(0xFFC026D3), 2_200L),
+                    AllocItem("Property", NetWorthColors.Violet, 108_200L),
+                    AllocItem("Vehicle", NetWorthColors.Grape, 12_300L),
+                    AllocItem("Revolving", NetWorthColors.Orchid, 4_850L),
+                    AllocItem("Education", NetWorthColors.Magenta, 2_200L),
                 ),
                 holdingsTotal = 127_550L,
                 selectedSort = SortMode.Largest,
                 holdings = listOf(
-                    Holding("Mortgage", "Property", 108_200L, Color(0xFF7C3AED), NetWorthIcons.Home),
-                    Holding("Auto Loan", "Vehicle", 12_300L, Color(0xFF9333EA), NetWorthIcons.Car),
-                    Holding("Credit Cards", "Revolving", 4_850L, Color(0xFFA855F7), NetWorthIcons.LiabilitiesCard),
-                    Holding("Student Loan", "Education", 2_200L, Color(0xFFC026D3), NetWorthIcons.Document),
+                    Holding("Mortgage", "Property", 108_200L, NetWorthColors.Violet, NetWorthIcons.Home),
+                    Holding("Auto Loan", "Vehicle", 12_300L, NetWorthColors.Grape, NetWorthIcons.Car),
+                    Holding("Credit Cards", "Revolving", 4_850L, NetWorthColors.Orchid, NetWorthIcons.LiabilitiesCard),
+                    Holding("Student Loan", "Education", 2_200L, NetWorthColors.Magenta, NetWorthIcons.Document),
                 ),
             )
         }

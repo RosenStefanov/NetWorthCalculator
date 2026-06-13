@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,10 +30,10 @@ import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
 private val ButtonShape = RoundedCornerShape(15.dp)
-private val DeleteBorder = Color(0xFFF3D6E0)
-private val DeleteTint = Color(0xFFE0457B)
 
 @Composable
 fun DetailActions(
@@ -75,15 +76,15 @@ fun DetailActions(
             modifier = Modifier
                 .size(50.dp)
                 .clip(ButtonShape)
-                .background(Color.White)
-                .border(1.5.dp, DeleteBorder, ButtonShape)
+                .background(MaterialTheme.colorScheme.surface)
+                .border(1.5.dp, NetWorthTheme.extendedColors.negativeTint, ButtonShape)
                 .clickable(onClick = onDelete),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 painter = painterResource(NetWorthIcons.Trash),
                 contentDescription = "Delete",
-                tint = DeleteTint,
+                tint = NetWorthColors.Negative,
                 modifier = Modifier.size(19.dp),
             )
         }

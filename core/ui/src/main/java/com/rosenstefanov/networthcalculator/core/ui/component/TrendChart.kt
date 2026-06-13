@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 import com.rosenstefanov.networthcalculator.core.ui.theme.SemanticAssets
 import com.rosenstefanov.networthcalculator.core.ui.theme.SemanticLiabilities
@@ -83,7 +84,7 @@ fun TrendChart(
             path = band,
             brush = Brush.verticalGradient(
                 0f to SemanticAssets.copy(alpha = bandTopAlpha),
-                1f to Color(0xFF8A2EE8).copy(alpha = 0.04f),
+                1f to NetWorthColors.Purple.copy(alpha = 0.04f),
             ),
         )
 
