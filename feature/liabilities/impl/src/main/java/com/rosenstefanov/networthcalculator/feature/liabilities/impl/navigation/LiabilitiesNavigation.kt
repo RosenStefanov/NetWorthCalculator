@@ -23,6 +23,9 @@ fun EntryProviderScope<NavKey>.liabilitiesEntries(navigator: Navigator) {
         AddLiabilityScreen(onNavigateBack = { navigator.goBack() })
     }
     entry<LiabilityDetailRoute> {
-        LiabilityDetailScreen(onNavigateBack = { navigator.goBack() })
+        LiabilityDetailScreen(
+            onNavigateBack = { navigator.goBack() },
+            onNavigateToEdit = { navigator.navigate(AddLiabilityRoute) },
+        )
     }
 }

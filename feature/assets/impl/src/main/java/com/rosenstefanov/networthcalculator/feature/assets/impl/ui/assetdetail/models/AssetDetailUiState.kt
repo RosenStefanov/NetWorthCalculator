@@ -2,5 +2,8 @@ package com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assetdetail.
 
 sealed interface AssetDetailUiState {
 
-    data object Content : AssetDetailUiState
+    data class Content(
+        val range: String = "1Y",
+        val showDeleteDialog: Boolean = false,
+    ) : AssetDetailUiState
 }

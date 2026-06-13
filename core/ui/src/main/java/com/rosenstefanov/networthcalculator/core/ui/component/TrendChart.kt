@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +39,8 @@ import kotlin.math.roundToInt
 private val ChartHeight = 132.dp
 private val YAxisWidth = 30.dp
 
+val TrendChartPlotInset = YAxisWidth + 6.dp
+
 private const val TopPad = 0.06f
 private const val BottomPad = 0.06f
 private const val Usable = 1f - TopPad - BottomPad
@@ -52,15 +55,108 @@ fun TrendChart(
 ) {
     val isDark = surface.luminance() < 0.5f
     val bandTopAlpha = if (isDark) 0.34f else 0.28f
-    val gridColor = if (isDark) Color.White.copy(alpha = 0.10f) else Color(0xFFE7E9F2)
 
     val dataMax = max(
         assetsValues.maxOrNull() ?: 0f,
         liabilitiesValues.maxOrNull() ?: 0f,
     )
     val (axisMax, tickValues) = niceAxis(dataMax)
-    fun fractionOf(value: Float): Float = TopPad + (axisMax - value) / axisMax * Usable
+    val fractionOf = fractionOf(axisMax)
 
+    TrendChartScaffold(
+        tickValues = tickValues,
+        fractionOf = fractionOf,
+        gridColor = gridColor(isDark),
+        formatAxisLabel = formatAxisLabel,
+        modifier = modifier,
+    ) {
+        val aPts = points(assetsValues, fractionOf)
+        val lPts = points(liabilitiesValues, fractionOf)
+
+        val band = Path().apply {
+            moveTo(aPts.first().x, aPts.first().y)
+            aPts.drop(1).forEach { lineTo(it.x, it.y) }
+            lPts.reversed().forEach { lineTo(it.x, it.y) }
+            close()
+        }
+        drawPath(
+            path = band,
+            brush = Brush.verticalGradient(
+                0f to SemanticAssets.copy(alpha = bandTopAlpha),
+                1f to Color(0xFF8A2EE8).copy(alpha = 0.04f),
+            ),
+        )
+
+        val stroke = Stroke(width = 2.4.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round)
+        drawPath(linePath(aPts), SemanticAssets, style = stroke)
+        drawPath(linePath(lPts), SemanticLiabilities, style = stroke)
+
+        val dotR = 3.4.dp.toPx()
+        val haloR = dotR + 2.dp.toPx()
+        listOf(aPts.last() to SemanticAssets, lPts.last() to SemanticLiabilities).forEach { (p, c) ->
+            drawCircle(surface, radius = haloR, center = p)
+            drawCircle(c, radius = dotR, center = p)
+        }
+    }
+}
+
+@Composable
+fun TrendChart(
+    values: List<Float>,
+    accent: Color,
+    surface: Color,
+    modifier: Modifier = Modifier,
+    formatAxisLabel: (Float) -> String = ::defaultTrendAxisLabel,
+) {
+    val isDark = surface.luminance() < 0.5f
+    val (axisMax, tickValues) = niceAxis(values.maxOrNull() ?: 0f)
+    val fractionOf = fractionOf(axisMax)
+
+    TrendChartScaffold(
+        tickValues = tickValues,
+        fractionOf = fractionOf,
+        gridColor = gridColor(isDark),
+        formatAxisLabel = formatAxisLabel,
+        modifier = modifier,
+    ) {
+        val pts = points(values, fractionOf)
+
+        val area = Path().apply {
+            moveTo(pts.first().x, pts.first().y)
+            pts.drop(1).forEach { lineTo(it.x, it.y) }
+            lineTo(size.width, size.height)
+            lineTo(0f, size.height)
+            close()
+        }
+        drawPath(
+            path = area,
+            brush = Brush.verticalGradient(
+                0f to accent.copy(alpha = 0.22f),
+                1f to accent.copy(alpha = 0f),
+            ),
+        )
+
+        drawPath(
+            path = linePath(pts),
+            color = accent,
+            style = Stroke(width = 2.6.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round),
+        )
+
+        val dotR = 4.dp.toPx()
+        drawCircle(surface, radius = dotR + 1.25.dp.toPx(), center = pts.last())
+        drawCircle(accent, radius = dotR, center = pts.last())
+    }
+}
+
+@Composable
+private fun TrendChartScaffold(
+    tickValues: List<Float>,
+    fractionOf: (Float) -> Float,
+    gridColor: Color,
+    formatAxisLabel: (Float) -> String,
+    modifier: Modifier = Modifier,
+    drawSeries: DrawScope.() -> Unit,
+) {
     Row(
         modifier = modifier.height(ChartHeight),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -90,58 +186,35 @@ fun TrendChart(
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
-            val w = size.width
-            val h = size.height
-
             tickValues.forEach { value ->
-                val y = h * fractionOf(value)
+                val y = size.height * fractionOf(value)
                 drawLine(
                     color = gridColor,
                     start = Offset(0f, y),
-                    end = Offset(w, y),
+                    end = Offset(size.width, y),
                     strokeWidth = 1.dp.toPx(),
                     pathEffect = PathEffect.dashPathEffect(floatArrayOf(3f, 4f)),
                 )
             }
-
-            fun pts(values: List<Float>): List<Offset> = values.mapIndexed { i, v ->
-                Offset(x = w * i / (values.size - 1), y = h * fractionOf(v))
-            }
-
-            val aPts = pts(assetsValues)
-            val lPts = pts(liabilitiesValues)
-
-            val band = Path().apply {
-                moveTo(aPts.first().x, aPts.first().y)
-                aPts.drop(1).forEach { lineTo(it.x, it.y) }
-                lPts.reversed().forEach { lineTo(it.x, it.y) }
-                close()
-            }
-            drawPath(
-                path = band,
-                brush = Brush.verticalGradient(
-                    0f to SemanticAssets.copy(alpha = bandTopAlpha),
-                    1f to Color(0xFF8A2EE8).copy(alpha = 0.04f),
-                ),
-            )
-
-            fun line(pts: List<Offset>): Path = Path().apply {
-                moveTo(pts.first().x, pts.first().y)
-                pts.drop(1).forEach { lineTo(it.x, it.y) }
-            }
-
-            val stroke = Stroke(width = 2.4.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round)
-            drawPath(line(aPts), SemanticAssets, style = stroke)
-            drawPath(line(lPts), SemanticLiabilities, style = stroke)
-
-            val dotR = 3.4.dp.toPx()
-            val haloR = dotR + 2.dp.toPx()
-            listOf(aPts.last() to SemanticAssets, lPts.last() to SemanticLiabilities).forEach { (p, c) ->
-                drawCircle(surface, radius = haloR, center = p)
-                drawCircle(c, radius = dotR, center = p)
-            }
+            drawSeries()
         }
     }
+}
+
+private fun gridColor(isDark: Boolean): Color =
+    if (isDark) Color.White.copy(alpha = 0.10f) else Color(0xFFE7E9F2)
+
+private fun fractionOf(axisMax: Float): (Float) -> Float =
+    { value -> TopPad + (axisMax - value) / axisMax * Usable }
+
+private fun DrawScope.points(values: List<Float>, fractionOf: (Float) -> Float): List<Offset> =
+    values.mapIndexed { i, v ->
+        Offset(x = size.width * i / (values.size - 1), y = size.height * fractionOf(v))
+    }
+
+private fun linePath(pts: List<Offset>): Path = Path().apply {
+    moveTo(pts.first().x, pts.first().y)
+    pts.drop(1).forEach { lineTo(it.x, it.y) }
 }
 
 private const val TargetIntervals = 3

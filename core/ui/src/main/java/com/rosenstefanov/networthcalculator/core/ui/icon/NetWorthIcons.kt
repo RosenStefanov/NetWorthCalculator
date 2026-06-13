@@ -18,6 +18,7 @@ object NetWorthIcons {
     @DrawableRes val ChevronRight = R.drawable.ic_chevron_right
     @DrawableRes val Dashboard = R.drawable.ic_dashboard
     @DrawableRes val Document = R.drawable.ic_document
+    @DrawableRes val Edit = R.drawable.ic_edit
     @DrawableRes val Eye = R.drawable.ic_eye
     @DrawableRes val Gem = R.drawable.ic_gem
     @DrawableRes val Grid = R.drawable.ic_grid
@@ -31,6 +32,7 @@ object NetWorthIcons {
     @DrawableRes val Receipt = R.drawable.ic_receipt
     @DrawableRes val Scale = R.drawable.ic_scale
     @DrawableRes val SettingsGear = R.drawable.ic_settings_gear
+    @DrawableRes val Trash = R.drawable.ic_trash
     @DrawableRes val Wallet = R.drawable.ic_wallet
     @DrawableRes val Wifi = R.drawable.ic_wifi
 }
