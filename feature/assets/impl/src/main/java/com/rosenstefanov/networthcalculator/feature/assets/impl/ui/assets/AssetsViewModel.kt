@@ -38,6 +38,7 @@ class AssetsViewModel @Inject constructor() : ViewModel() {
         when (intent) {
             AssetsIntent.SettingsClicked -> emitEffect(AssetsEffect.NavigateToSettings)
             AssetsIntent.AddAccountClicked -> emitEffect(AssetsEffect.NavigateToAddAccount)
+            AssetsIntent.HoldingClicked -> emitEffect(AssetsEffect.NavigateToDetail)
             is AssetsIntent.SortSelected -> {
                 val current = _uiState.value
                 if (current is AssetsUiState.Content) {

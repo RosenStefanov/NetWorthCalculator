@@ -39,6 +39,7 @@ fun RankedListSection(
     sort: SortMode,
     onSort: (SortMode) -> Unit,
     modifier: Modifier = Modifier,
+    onHoldingClick: (Holding) -> Unit = {},
 ) {
     val sorted = remember(holdings, sort) {
         when (sort) {
@@ -107,6 +108,7 @@ fun RankedListSection(
                         accentColor = holding.color,
                         chipColor = holding.color.copy(alpha = 0.12f),
                         subtitle = "%.1f%% of total".format(Locale.US, percent),
+                        onClick = { onHoldingClick(holding) },
                     )
                 }
             }

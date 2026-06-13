@@ -50,6 +50,8 @@ import java.math.BigDecimal
 @Composable
 internal fun DashboardScreen(
     onNavigateToSettings: () -> Unit,
+    onNavigateToAssetDetail: () -> Unit = {},
+    onNavigateToLiabilityDetail: () -> Unit = {},
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -58,6 +60,8 @@ internal fun DashboardScreen(
         viewModel.effects.collect { effect ->
             when (effect) {
                 DashboardEffect.NavigateToSettings -> onNavigateToSettings()
+                DashboardEffect.NavigateToAssetDetail -> onNavigateToAssetDetail()
+                DashboardEffect.NavigateToLiabilityDetail -> onNavigateToLiabilityDetail()
             }
         }
     }
@@ -164,6 +168,7 @@ private fun DashboardContent(
             selectedType = state.selectedHoldingType,
             onTypeSelected = { onIntent(DashboardIntent.HoldingTypeSelected(it)) },
             modifier = Modifier.padding(top = 16.dp),
+            onHoldingClick = { type, _ -> onIntent(DashboardIntent.HoldingClicked(type)) },
         )
     }
 }

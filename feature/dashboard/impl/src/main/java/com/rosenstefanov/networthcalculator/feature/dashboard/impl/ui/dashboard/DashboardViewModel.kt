@@ -53,6 +53,13 @@ class DashboardViewModel @Inject constructor() : ViewModel() {
                     _uiState.value = current.copy(selectedHoldingType = intent.type)
                 }
             }
+            is DashboardIntent.HoldingClicked -> viewModelScope.launch {
+                val effect = when (intent.type) {
+                    HoldingType.Assets -> DashboardEffect.NavigateToAssetDetail
+                    HoldingType.Liabilities -> DashboardEffect.NavigateToLiabilityDetail
+                }
+                _effects.send(effect)
+            }
         }
     }
 

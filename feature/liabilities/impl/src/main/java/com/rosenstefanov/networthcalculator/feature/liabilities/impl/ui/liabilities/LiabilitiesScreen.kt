@@ -37,6 +37,7 @@ import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilit
 internal fun LiabilitiesScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToAddAccount: () -> Unit,
+    onNavigateToHoldingDetail: () -> Unit = {},
     viewModel: LiabilitiesViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -46,6 +47,7 @@ internal fun LiabilitiesScreen(
             when (effect) {
                 LiabilitiesEffect.NavigateToSettings -> onNavigateToSettings()
                 LiabilitiesEffect.NavigateToAddAccount -> onNavigateToAddAccount()
+                LiabilitiesEffect.NavigateToDetail -> onNavigateToHoldingDetail()
             }
         }
     }
@@ -111,6 +113,7 @@ internal fun LiabilitiesScreen(
                     total = uiState.holdingsTotal,
                     sort = uiState.selectedSort,
                     onSort = { onIntent(LiabilitiesIntent.SortSelected(it)) },
+                    onHoldingClick = { onIntent(LiabilitiesIntent.HoldingClicked) },
                 )
             }
         }

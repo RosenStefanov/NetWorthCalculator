@@ -2,4 +2,6 @@ package com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard
 
 sealed interface DashboardEffect {
     data object NavigateToSettings : DashboardEffect
+    data object NavigateToAssetDetail : DashboardEffect
+    data object NavigateToLiabilityDetail : DashboardEffect
 }

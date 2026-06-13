@@ -56,4 +56,25 @@ class AssetsScreenTest : ScreenSnapshotTest() {
 
         assertThat(toAdd).isTrue()
     }
+
+    @Test
+    fun holdingEffect_invokesOnNavigateToHoldingDetail() {
+        var toDetail = false
+        val viewModel = AssetsViewModel()
+        composeTestRule.setContent {
+            NetWorthCalculatorTheme {
+                AssetsScreen(
+                    onNavigateToSettings = {},
+                    onNavigateToAddAccount = {},
+                    onNavigateToHoldingDetail = { toDetail = true },
+                    viewModel = viewModel,
+                )
+            }
+        }
+
+        viewModel.onIntent(AssetsIntent.HoldingClicked)
+        composeTestRule.waitForIdle()
+
+        assertThat(toDetail).isTrue()
+    }
 }

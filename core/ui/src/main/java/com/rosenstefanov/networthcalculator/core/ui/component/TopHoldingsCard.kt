@@ -27,6 +27,7 @@ fun TopHoldingsCard(
     onTypeSelected: (HoldingType) -> Unit,
     modifier: Modifier = Modifier,
     title: String = "Top Holdings",
+    onHoldingClick: (HoldingType, TopHolding) -> Unit = { _, _ -> },
 ) {
     NetWorthSurfaceCard(modifier = modifier) {
         Text(
@@ -84,6 +85,7 @@ fun TopHoldingsCard(
                     },
                     accentColor = accent,
                     chipColor = chip,
+                    onClick = { onHoldingClick(selectedType, holding) },
                 )
             }
         }
