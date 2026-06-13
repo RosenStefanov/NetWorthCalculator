@@ -6,9 +6,11 @@ import com.rosenstefanov.networthcalculator.core.navigation.Navigator
 import com.rosenstefanov.networthcalculator.feature.assets.api.AddAssetRoute
 import com.rosenstefanov.networthcalculator.feature.assets.api.AssetDetailRoute
 import com.rosenstefanov.networthcalculator.feature.assets.api.AssetsRoute
+import com.rosenstefanov.networthcalculator.feature.assets.api.EditAssetRoute
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.addasset.AddAssetScreen
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assetdetail.AssetDetailScreen
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets.AssetsScreen
+import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.EditAssetScreen
 import com.rosenstefanov.networthcalculator.feature.settings.api.SettingsRoute
 
 fun EntryProviderScope<NavKey>.assetsEntries(navigator: Navigator) {
@@ -25,7 +27,10 @@ fun EntryProviderScope<NavKey>.assetsEntries(navigator: Navigator) {
     entry<AssetDetailRoute> {
         AssetDetailScreen(
             onNavigateBack = { navigator.goBack() },
-            onNavigateToEdit = { navigator.navigate(AddAssetRoute) },
+            onNavigateToEdit = { navigator.navigate(EditAssetRoute) },
         )
+    }
+    entry<EditAssetRoute> {
+        EditAssetScreen(onNavigateBack = { navigator.goBack() })
     }
 }
