@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AssetDetailViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState = MutableStateFlow<AssetDetailUiState>(AssetDetailUiState.Content)
+    private val _uiState = MutableStateFlow<AssetDetailUiState>(AssetDetailUiState.Content())
     val uiState: StateFlow<AssetDetailUiState> = _uiState.asStateFlow()
 
     private val _effects = Channel<AssetDetailEffect>(Channel.BUFFERED)
@@ -27,6 +27,18 @@ class AssetDetailViewModel @Inject constructor() : ViewModel() {
     fun onIntent(intent: AssetDetailIntent) {
         when (intent) {
             AssetDetailIntent.CloseClicked -> emitEffect(AssetDetailEffect.NavigateBack)
+            is AssetDetailIntent.RangeSelected -> updateContent { it.copy(range = intent.range) }
+            AssetDetailIntent.EditClicked -> emitEffect(AssetDetailEffect.NavigateToEdit)
+            AssetDetailIntent.DeleteClicked -> updateContent { it.copy(showDeleteDialog = true) }
+            AssetDetailIntent.DeleteDismissed -> updateContent { it.copy(showDeleteDialog = false) }
+            AssetDetailIntent.DeleteConfirmed -> emitEffect(AssetDetailEffect.NavigateBack)
+        }
+    }
+
+    private inline fun updateContent(transform: (AssetDetailUiState.Content) -> AssetDetailUiState.Content) {
+        val current = _uiState.value
+        if (current is AssetDetailUiState.Content) {
+            _uiState.value = transform(current)
         }
     }
 

@@ -23,6 +23,9 @@ fun EntryProviderScope<NavKey>.assetsEntries(navigator: Navigator) {
         AddAssetScreen(onNavigateBack = { navigator.goBack() })
     }
     entry<AssetDetailRoute> {
-        AssetDetailScreen(onNavigateBack = { navigator.goBack() })
+        AssetDetailScreen(
+            onNavigateBack = { navigator.goBack() },
+            onNavigateToEdit = { navigator.navigate(AddAssetRoute) },
+        )
     }
 }

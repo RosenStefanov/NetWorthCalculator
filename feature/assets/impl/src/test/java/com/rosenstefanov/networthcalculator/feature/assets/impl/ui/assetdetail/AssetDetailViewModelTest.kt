@@ -23,9 +23,16 @@ class AssetDetailViewModelTest {
     val mainDispatcherExtension = MainDispatcherExtension(testDispatcher)
 
     @Test
-    fun `initial state is Content`() = runTest(testDispatcher) {
+    fun `initial state is Content with default range`() = runTest(testDispatcher) {
         val viewModel = AssetDetailViewModel()
-        assertThat(viewModel.uiState.value).isEqualTo(AssetDetailUiState.Content)
+        assertThat(viewModel.uiState.value).isEqualTo(AssetDetailUiState.Content(range = "1Y"))
+    }
+
+    @Test
+    fun `RangeSelected updates the range`() = runTest(testDispatcher) {
+        val viewModel = AssetDetailViewModel()
+        viewModel.onIntent(AssetDetailIntent.RangeSelected("3M"))
+        assertThat((viewModel.uiState.value as AssetDetailUiState.Content).range).isEqualTo("3M")
     }
 
     @Test
@@ -33,6 +40,37 @@ class AssetDetailViewModelTest {
         val viewModel = AssetDetailViewModel()
         viewModel.effects.test {
             viewModel.onIntent(AssetDetailIntent.CloseClicked)
+            advanceUntilIdle()
+            assertThat(awaitItem()).isEqualTo(AssetDetailEffect.NavigateBack)
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `EditClicked emits NavigateToEdit`() = runTest(testDispatcher) {
+        val viewModel = AssetDetailViewModel()
+        viewModel.effects.test {
+            viewModel.onIntent(AssetDetailIntent.EditClicked)
+            advanceUntilIdle()
+            assertThat(awaitItem()).isEqualTo(AssetDetailEffect.NavigateToEdit)
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `DeleteClicked then DeleteDismissed toggles the dialog`() = runTest(testDispatcher) {
+        val viewModel = AssetDetailViewModel()
+        viewModel.onIntent(AssetDetailIntent.DeleteClicked)
+        assertThat((viewModel.uiState.value as AssetDetailUiState.Content).showDeleteDialog).isTrue()
+        viewModel.onIntent(AssetDetailIntent.DeleteDismissed)
+        assertThat((viewModel.uiState.value as AssetDetailUiState.Content).showDeleteDialog).isFalse()
+    }
+
+    @Test
+    fun `DeleteConfirmed emits NavigateBack`() = runTest(testDispatcher) {
+        val viewModel = AssetDetailViewModel()
+        viewModel.effects.test {
+            viewModel.onIntent(AssetDetailIntent.DeleteConfirmed)
             advanceUntilIdle()
             assertThat(awaitItem()).isEqualTo(AssetDetailEffect.NavigateBack)
             cancelAndConsumeRemainingEvents()

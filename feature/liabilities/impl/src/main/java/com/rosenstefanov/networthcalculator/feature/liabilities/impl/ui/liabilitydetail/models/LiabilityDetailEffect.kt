@@ -2,4 +2,5 @@ package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabili
 
 sealed interface LiabilityDetailEffect {
     data object NavigateBack : LiabilityDetailEffect
+    data object NavigateToEdit : LiabilityDetailEffect
 }
