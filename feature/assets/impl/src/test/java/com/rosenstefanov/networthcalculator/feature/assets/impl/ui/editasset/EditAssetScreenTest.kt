@@ -1,6 +1,7 @@
 package com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset
 
 import com.google.common.truth.Truth.assertThat
+import com.rosenstefanov.networthcalculator.core.common.CurrencyFormatter
 import com.rosenstefanov.networthcalculator.core.testing.ScreenSnapshotTest
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetIntent
@@ -15,7 +16,7 @@ class EditAssetScreenTest : ScreenSnapshotTest() {
     @Test
     fun navigateBackEffect_invokesOnNavigateBack() {
         var navigatedBack = false
-        val viewModel = EditAssetViewModel()
+        val viewModel = EditAssetViewModel(CurrencyFormatter())
         composeTestRule.setContent {
             NetWorthCalculatorTheme {
                 EditAssetScreen(onNavigateBack = { navigatedBack = true }, viewModel = viewModel)

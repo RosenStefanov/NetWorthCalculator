@@ -2,6 +2,7 @@ package com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rosenstefanov.networthcalculator.core.common.CurrencyFormatter
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetEffect
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetIntent
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetUiState
@@ -16,9 +17,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditAssetViewModel @Inject constructor() : ViewModel() {
+class EditAssetViewModel @Inject constructor(
+    private val currencyFormatter: CurrencyFormatter,
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<EditAssetUiState>(EditAssetUiState.Content)
+    private val _uiState = MutableStateFlow<EditAssetUiState>(
+        EditAssetUiState.Content(
+            name = "Primary Residence",
+            amount = currencyFormatter.format("312000"),
+            description = "Family home in Austin. Primary residence, purchased 2021.",
+        ),
+    )
     val uiState: StateFlow<EditAssetUiState> = _uiState.asStateFlow()
 
     private val _effects = Channel<EditAssetEffect>(Channel.BUFFERED)
@@ -26,7 +35,20 @@ class EditAssetViewModel @Inject constructor() : ViewModel() {
 
     fun onIntent(intent: EditAssetIntent) {
         when (intent) {
+            is EditAssetIntent.NameChanged -> updateContent { it.copy(name = intent.name) }
+            is EditAssetIntent.AmountChanged ->
+                updateContent { it.copy(amount = currencyFormatter.format(intent.amount)) }
+            is EditAssetIntent.DescriptionChanged ->
+                updateContent { it.copy(description = intent.description) }
+            EditAssetIntent.SaveClicked -> emitEffect(EditAssetEffect.NavigateBack)
             EditAssetIntent.CloseClicked -> emitEffect(EditAssetEffect.NavigateBack)
+        }
+    }
+
+    private inline fun updateContent(transform: (EditAssetUiState.Content) -> EditAssetUiState.Content) {
+        val current = _uiState.value
+        if (current is EditAssetUiState.Content) {
+            _uiState.value = transform(current)
         }
     }
 
