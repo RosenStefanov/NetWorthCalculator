@@ -37,6 +37,7 @@ import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assets.models
 internal fun AssetsScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToAddAccount: () -> Unit,
+    onNavigateToHoldingDetail: () -> Unit = {},
     viewModel: AssetsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -46,6 +47,7 @@ internal fun AssetsScreen(
             when (effect) {
                 AssetsEffect.NavigateToSettings -> onNavigateToSettings()
                 AssetsEffect.NavigateToAddAccount -> onNavigateToAddAccount()
+                AssetsEffect.NavigateToDetail -> onNavigateToHoldingDetail()
             }
         }
     }
@@ -111,6 +113,7 @@ internal fun AssetsScreen(
                     total = uiState.holdingsTotal,
                     sort = uiState.selectedSort,
                     onSort = { onIntent(AssetsIntent.SortSelected(it)) },
+                    onHoldingClick = { onIntent(AssetsIntent.HoldingClicked) },
                 )
             }
         }

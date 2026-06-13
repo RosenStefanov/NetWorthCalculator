@@ -38,6 +38,7 @@ class LiabilitiesViewModel @Inject constructor() : ViewModel() {
         when (intent) {
             LiabilitiesIntent.SettingsClicked -> emitEffect(LiabilitiesEffect.NavigateToSettings)
             LiabilitiesIntent.AddAccountClicked -> emitEffect(LiabilitiesEffect.NavigateToAddAccount)
+            LiabilitiesIntent.HoldingClicked -> emitEffect(LiabilitiesEffect.NavigateToDetail)
             is LiabilitiesIntent.SortSelected -> {
                 val current = _uiState.value
                 if (current is LiabilitiesUiState.Content) {

@@ -56,4 +56,25 @@ class LiabilitiesScreenTest : ScreenSnapshotTest() {
 
         assertThat(toAdd).isTrue()
     }
+
+    @Test
+    fun holdingEffect_invokesOnNavigateToHoldingDetail() {
+        var toDetail = false
+        val viewModel = LiabilitiesViewModel()
+        composeTestRule.setContent {
+            NetWorthCalculatorTheme {
+                LiabilitiesScreen(
+                    onNavigateToSettings = {},
+                    onNavigateToAddAccount = {},
+                    onNavigateToHoldingDetail = { toDetail = true },
+                    viewModel = viewModel,
+                )
+            }
+        }
+
+        viewModel.onIntent(LiabilitiesIntent.HoldingClicked)
+        composeTestRule.waitForIdle()
+
+        assertThat(toDetail).isTrue()
+    }
 }
