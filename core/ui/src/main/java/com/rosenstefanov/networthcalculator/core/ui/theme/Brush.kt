@@ -20,6 +20,6 @@ private fun cornerGradient(colors: List<Color>, stops: List<Float>): ShaderBrush
 val NetWorthBrandBrush: ShaderBrush = cornerGradient(NetWorthBrandGradient, listOf(0f, 0.52f, 1f))
 
 val NetWorthLiabilitiesBrush: ShaderBrush = cornerGradient(
-    colors = listOf(Color(0xFF7C3AED), Color(0xFF9333EA), Color(0xFFC026D3)),
-    stops = listOf(0f, 0.5f, 1f),
+    colors = listOf(NetWorthColors.Violet, NetWorthColors.Grape, NetWorthColors.Magenta),
+    stops = listOf(0f, 0.52f, 1f),
 )

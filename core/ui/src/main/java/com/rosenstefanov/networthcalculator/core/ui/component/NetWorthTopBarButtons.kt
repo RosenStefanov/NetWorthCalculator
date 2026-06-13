@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 
 // Shared icon-button spec (42×42, radius 14, 21dp glyph).
 private val TopBarButtonSize = 42.dp
@@ -88,4 +89,4 @@ fun NetWorthGradientIconButton(
     }
 }
 
-private val NeutralShadow = Color(0xFF1E1646).copy(alpha = 0.06f)
+private val NeutralShadow = NetWorthColors.Shadow.copy(alpha = 0.06f)

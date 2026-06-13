@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
 @Composable
@@ -48,7 +49,7 @@ fun NetWorthSegmentedToggle(
             val selectedModifier = when {
                 isSelected && !isDark ->
                     Modifier
-                        .shadow(elevation = 2.dp, shape = buttonShape, spotColor = ToggleShadow, ambientColor = ToggleShadow)
+                        .shadow(elevation = 2.dp, shape = buttonShape, spotColor = NetWorthColors.Shadow, ambientColor = NetWorthColors.Shadow)
                         .clip(buttonShape)
                         .background(selectedBg)
                 isSelected ->
@@ -81,4 +82,3 @@ fun NetWorthSegmentedToggle(
     }
 }
 
-private val ToggleShadow = Color(0xFF1E1646)

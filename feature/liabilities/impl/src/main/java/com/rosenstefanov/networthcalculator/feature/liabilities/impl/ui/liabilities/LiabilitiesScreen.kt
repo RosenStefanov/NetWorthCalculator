@@ -28,6 +28,7 @@ import com.rosenstefanov.networthcalculator.core.ui.models.AllocItem
 import com.rosenstefanov.networthcalculator.core.ui.models.Holding
 import com.rosenstefanov.networthcalculator.core.ui.models.SortMode
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthLiabilitiesBrush
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesEffect
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilities.models.LiabilitiesIntent
@@ -61,7 +62,7 @@ internal fun LiabilitiesScreen(
     onIntent: (LiabilitiesIntent) -> Unit,
 ) {
     val accentGradient = NetWorthLiabilitiesBrush
-    val accentGlow = Color(0xFF9333EA).copy(alpha = 0.6f)
+    val accentGlow = NetWorthColors.LiabilityGlow.copy(alpha = 0.6f)
 
     Scaffold(
         topBar = {

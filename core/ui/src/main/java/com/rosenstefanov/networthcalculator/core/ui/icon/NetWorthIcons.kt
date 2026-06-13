@@ -16,8 +16,10 @@ object NetWorthIcons {
     @DrawableRes val ChevronDown = R.drawable.ic_chevron_down
     @DrawableRes val ChevronLeft = R.drawable.ic_chevron_left
     @DrawableRes val ChevronRight = R.drawable.ic_chevron_right
+    @DrawableRes val Close = R.drawable.ic_close
     @DrawableRes val Dashboard = R.drawable.ic_dashboard
     @DrawableRes val Document = R.drawable.ic_document
+    @DrawableRes val Dollar = R.drawable.ic_dollar
     @DrawableRes val Edit = R.drawable.ic_edit
     @DrawableRes val Eye = R.drawable.ic_eye
     @DrawableRes val Gem = R.drawable.ic_gem
@@ -26,12 +28,16 @@ object NetWorthIcons {
     @DrawableRes val Home = R.drawable.ic_home
     @DrawableRes val InsightsBars = R.drawable.ic_insights_bars
     @DrawableRes val LiabilitiesCard = R.drawable.ic_liabilities_card
+    @DrawableRes val Moon = R.drawable.ic_moon
     @DrawableRes val Person = R.drawable.ic_person
+    @DrawableRes val Phone = R.drawable.ic_phone
     @DrawableRes val Plant = R.drawable.ic_plant
     @DrawableRes val Plus = R.drawable.ic_plus
     @DrawableRes val Receipt = R.drawable.ic_receipt
     @DrawableRes val Scale = R.drawable.ic_scale
     @DrawableRes val SettingsGear = R.drawable.ic_settings_gear
+    @DrawableRes val Star = R.drawable.ic_star
+    @DrawableRes val Sun = R.drawable.ic_sun
     @DrawableRes val Trash = R.drawable.ic_trash
     @DrawableRes val Wallet = R.drawable.ic_wallet
     @DrawableRes val Wifi = R.drawable.ic_wifi

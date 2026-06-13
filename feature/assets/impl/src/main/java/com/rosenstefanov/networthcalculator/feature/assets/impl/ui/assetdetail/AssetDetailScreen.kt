@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,12 +30,11 @@ import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assetdetail.models.AssetDetailEffect
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assetdetail.models.AssetDetailIntent
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.assetdetail.models.AssetDetailUiState
-
-private const val Accent = 0xFF3B6BFF
 
 @Composable
 internal fun AssetDetailScreen(
@@ -65,6 +63,7 @@ internal fun AssetDetailScreen(
 ) {
     when (uiState) {
         is AssetDetailUiState.Content -> {
+            val accent = NetWorthTheme.extendedColors.accent
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -89,7 +88,7 @@ internal fun AssetDetailScreen(
                 ) {
                     ValueHistoryCard(
                         title = "Value history",
-                        accent = Color(Accent),
+                        accent = accent,
                         values = listOf(168_000f, 186_000f, 203_000f, 221_000f, 244_000f, 259_000f, 276_000f, 291_000f, 304_000f, 312_000f),
                         months = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun"),
                         range = uiState.range,
@@ -106,12 +105,12 @@ internal fun AssetDetailScreen(
                     ShareCard(
                         title = "Share of total assets",
                         percent = 75.7f,
-                        accent = Color(Accent),
+                        accent = accent,
                         modifier = Modifier.padding(bottom = 14.dp),
                     )
                     DetailActions(
                         accentGradient = NetWorthBrandBrush,
-                        glow = Color(0xFF5B45F5).copy(alpha = 0.5f),
+                        glow = NetWorthColors.AssetGlow.copy(alpha = 0.5f),
                         onEdit = { onIntent(AssetDetailIntent.EditClicked) },
                         onDelete = { onIntent(AssetDetailIntent.DeleteClicked) },
                         modifier = Modifier.padding(top = 6.dp),

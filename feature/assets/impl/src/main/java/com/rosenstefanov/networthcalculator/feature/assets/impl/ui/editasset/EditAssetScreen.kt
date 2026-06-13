@@ -15,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,12 +31,11 @@ import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetEffect
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetIntent
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetUiState
-
-private val Accent = Color(0xFF3B6BFF)
 
 @Composable
 internal fun EditAssetScreen(
@@ -77,6 +75,7 @@ internal fun EditAssetScreen(
                     .fillMaxSize()
                     .padding(top = padding.calculateTopPadding()),
             ) {
+                val accent = NetWorthTheme.extendedColors.accent
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -91,27 +90,27 @@ internal fun EditAssetScreen(
                         amount = "$312,000",
                         amountLabel = "VALUE",
                         gradient = NetWorthBrandBrush,
-                        glow = Color(0xFF5B45F5).copy(alpha = 0.6f),
+                        glow = NetWorthColors.AssetGlow.copy(alpha = 0.6f),
                     )
                     FieldLabel("Name")
                     InputField(
                         value = uiState.name,
                         placeholder = "e.g. Brokerage, Savings…",
-                        accentColor = Accent,
+                        accentColor = accent,
                         onValueChange = { onIntent(EditAssetIntent.NameChanged(it)) },
                     )
                     FieldLabel("Current value")
                     InputField(
                         value = uiState.amount,
                         placeholder = "0",
-                        accentColor = Accent,
+                        accentColor = accent,
                         onValueChange = { onIntent(EditAssetIntent.AmountChanged(it)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     )
                     DescriptionField(
                         value = uiState.description,
                         placeholder = "Add a note — account number, where it's held, etc.",
-                        accentColor = Accent,
+                        accentColor = accent,
                         onValueChange = { onIntent(EditAssetIntent.DescriptionChanged(it)) },
                         modifier = Modifier.padding(top = 18.dp),
                     )
@@ -122,7 +121,7 @@ internal fun EditAssetScreen(
                 PrimaryCtaBar(
                     label = "Save changes",
                     gradient = NetWorthBrandBrush,
-                    glow = Color(0xFF5B45F5).copy(alpha = 0.55f),
+                    glow = NetWorthColors.AssetGlow.copy(alpha = 0.55f),
                     enabled = formValid,
                     onClick = { onIntent(EditAssetIntent.SaveClicked) },
                     modifier = Modifier.align(Alignment.BottomCenter),

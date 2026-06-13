@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,13 +29,12 @@ import com.rosenstefanov.networthcalculator.core.ui.component.ValueHistoryCard
 import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthLiabilitiesBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilitydetail.models.LiabilityDetailEffect
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilitydetail.models.LiabilityDetailIntent
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.liabilitydetail.models.LiabilityDetailUiState
-
-private const val Accent = 0xFF9333EA
 
 @Composable
 internal fun LiabilityDetailScreen(
@@ -89,7 +87,7 @@ internal fun LiabilityDetailScreen(
                 ) {
                     ValueHistoryCard(
                         title = "Balance history",
-                        accent = Color(Accent),
+                        accent = NetWorthColors.Grape,
                         values = listOf(132_000f, 129_500f, 127_000f, 124_000f, 121_000f, 118_500f, 115_500f, 112_800f, 110_000f, 108_200f),
                         months = listOf("Jul", "Sep", "Nov", "Jan", "Mar", "Jun"),
                         range = uiState.range,
@@ -106,12 +104,12 @@ internal fun LiabilityDetailScreen(
                     ShareCard(
                         title = "Share of total liabilities",
                         percent = 84.8f,
-                        accent = Color(Accent),
+                        accent = NetWorthColors.Grape,
                         modifier = Modifier.padding(bottom = 14.dp),
                     )
                     DetailActions(
                         accentGradient = NetWorthLiabilitiesBrush,
-                        glow = Color(Accent).copy(alpha = 0.5f),
+                        glow = NetWorthColors.LiabilityGlow.copy(alpha = 0.5f),
                         onEdit = { onIntent(LiabilityDetailIntent.EditClicked) },
                         onDelete = { onIntent(LiabilityDetailIntent.DeleteClicked) },
                         modifier = Modifier.padding(top = 6.dp),

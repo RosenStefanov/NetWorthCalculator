@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 
 @Composable
 fun NetWorthSurfaceCard(
@@ -36,7 +37,7 @@ fun NetWorthSurfaceCard(
             .border(1.dp, Color.White.copy(alpha = 0.06f), shape)
     } else {
         Modifier
-            .shadow(elevation = 2.dp, shape = shape, ambientColor = ShadowColor, spotColor = ShadowColor)
+            .shadow(elevation = 2.dp, shape = shape, ambientColor = NetWorthColors.Shadow, spotColor = NetWorthColors.Shadow)
             .clip(shape)
             .background(surface)
     }
@@ -49,5 +50,3 @@ fun NetWorthSurfaceCard(
         content = content,
     )
 }
-
-private val ShadowColor = Color(0xFF1E1646)

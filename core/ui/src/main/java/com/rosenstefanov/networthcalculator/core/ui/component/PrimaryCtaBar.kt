@@ -26,10 +26,9 @@ import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthLiabilitiesBrush
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
 private val CtaShape = RoundedCornerShape(16.dp)
-private val DisabledFill = SolidColor(Color(0xFFDFE2EE))
-private val DisabledLabel = Color(0xFFA4A9BD)
 
 @Composable
 fun PrimaryCtaBar(
@@ -64,7 +63,7 @@ fun PrimaryCtaBar(
                     spotColor = glow,
                 )
                 .clip(CtaShape)
-                .background(if (enabled) gradient else DisabledFill)
+                .background(if (enabled) gradient else SolidColor(NetWorthTheme.extendedColors.disabledFill))
                 .clickable(enabled = enabled, onClick = onClick),
             contentAlignment = Alignment.Center,
         ) {
@@ -73,7 +72,7 @@ fun PrimaryCtaBar(
                 fontFamily = JakartaSans,
                 fontSize = 15.5.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (enabled) Color.White else DisabledLabel,
+                color = if (enabled) Color.White else NetWorthTheme.extendedColors.footnote,
             )
         }
     }

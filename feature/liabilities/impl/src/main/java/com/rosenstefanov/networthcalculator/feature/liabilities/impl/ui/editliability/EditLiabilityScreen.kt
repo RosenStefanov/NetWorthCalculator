@@ -15,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,13 +30,14 @@ import com.rosenstefanov.networthcalculator.core.ui.component.PrimaryCtaBar
 import com.rosenstefanov.networthcalculator.core.ui.icon.NetWorthIcons
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthLiabilitiesBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.editliability.models.EditLiabilityEffect
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.editliability.models.EditLiabilityIntent
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.editliability.models.EditLiabilityUiState
 
-private val Accent = Color(0xFF9333EA)
+private val Accent = NetWorthColors.Grape
 
 @Composable
 internal fun EditLiabilityScreen(

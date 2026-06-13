@@ -38,10 +38,6 @@ import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorThem
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
 private val DescriptionShape = RoundedCornerShape(15.dp)
-private val RestBorderColor = Color(0xFFE8E9F1)
-private val PlaceholderColor = Color(0xFFB7BACB)
-private val BadgeTextColor = Color(0xFFAEB2C5)
-private val BadgeBackground = Color(0xFFEEF0F7)
 
 @Composable
 fun DescriptionField(
@@ -72,10 +68,10 @@ fun DescriptionField(
                 fontFamily = JakartaSans,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = BadgeTextColor,
+                color = NetWorthTheme.extendedColors.chevron,
                 modifier = Modifier
                     .clip(RoundedCornerShape(6.dp))
-                    .background(BadgeBackground)
+                    .background(NetWorthTheme.extendedColors.field)
                     .padding(horizontal = 7.dp, vertical = 1.dp),
             )
         }
@@ -101,7 +97,7 @@ fun DescriptionField(
                         .background(MaterialTheme.colorScheme.surface)
                         .border(
                             width = 1.5.dp,
-                            color = if (focused) accentColor else RestBorderColor,
+                            color = if (focused) accentColor else NetWorthTheme.extendedColors.line,
                             shape = DescriptionShape,
                         )
                         .then(
@@ -126,7 +122,7 @@ fun DescriptionField(
                             fontFamily = JakartaSans,
                             fontSize = 14.5.sp,
                             fontWeight = FontWeight.Medium,
-                            color = PlaceholderColor,
+                            color = NetWorthTheme.extendedColors.placeholder,
                             lineHeight = 21.sp,
                         )
                     }

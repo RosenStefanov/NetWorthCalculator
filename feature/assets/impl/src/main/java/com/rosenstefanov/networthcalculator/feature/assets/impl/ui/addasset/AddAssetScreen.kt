@@ -15,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +32,7 @@ import com.rosenstefanov.networthcalculator.core.ui.models.AssetCategories
 import com.rosenstefanov.networthcalculator.core.ui.theme.JakartaSans
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthBrandBrush
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
+import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthColors
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.addasset.models.AddAssetEffect
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.addasset.models.AddAssetIntent
@@ -76,6 +76,7 @@ internal fun AddAssetScreen(
                     .fillMaxSize()
                     .padding(top = padding.calculateTopPadding()),
             ) {
+                val accent = NetWorthTheme.extendedColors.accent
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -90,7 +91,7 @@ internal fun AddAssetScreen(
                     amount = "$" + uiState.amount.ifEmpty { "0" },
                     amountLabel = "VALUE",
                     gradient = NetWorthBrandBrush,
-                    glow = Color(0xFF5B45F5).copy(alpha = 0.6f),
+                    glow = NetWorthColors.AssetGlow.copy(alpha = 0.6f),
                 )
                 Text(
                     text = "Name",
@@ -103,7 +104,7 @@ internal fun AddAssetScreen(
                 InputField(
                     value = uiState.name,
                     placeholder = "e.g. Brokerage, Savings…",
-                    accentColor = Color(0xFF3B6BFF),
+                    accentColor = accent,
                     onValueChange = { onIntent(AddAssetIntent.NameChanged(it)) },
                 )
                 Text(
@@ -117,21 +118,21 @@ internal fun AddAssetScreen(
                 InputField(
                     value = uiState.amount,
                     placeholder = "0",
-                    accentColor = Color(0xFF3B6BFF),
+                    accentColor = accent,
                     onValueChange = { onIntent(AddAssetIntent.AmountChanged(it)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
                 CategorySection(
                     categories = AssetCategories,
                     selected = uiState.category,
-                    accent = Color(0xFF3B6BFF),
+                    accent = accent,
                     onSelect = { onIntent(AddAssetIntent.CategorySelected(it)) },
                     modifier = Modifier.padding(top = 18.dp),
                 )
                 DescriptionField(
                     value = uiState.description,
                     placeholder = "Add a note — account number, where it's held, etc.",
-                    accentColor = Color(0xFF3B6BFF),
+                    accentColor = accent,
                     onValueChange = { onIntent(AddAssetIntent.DescriptionChanged(it)) },
                     modifier = Modifier.padding(top = 18.dp),
                 )
@@ -142,7 +143,7 @@ internal fun AddAssetScreen(
                 PrimaryCtaBar(
                     label = "Add asset",
                     gradient = NetWorthBrandBrush,
-                    glow = Color(0xFF5B45F5).copy(alpha = 0.55f),
+                    glow = NetWorthColors.AssetGlow.copy(alpha = 0.55f),
                     enabled = formValid,
                     onClick = { onIntent(AddAssetIntent.SaveClicked) },
                     modifier = Modifier.align(Alignment.BottomCenter),

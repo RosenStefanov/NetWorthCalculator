@@ -38,7 +38,6 @@ import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorThem
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthTheme
 
 private val FieldShape = RoundedCornerShape(15.dp)
-private val PlaceholderColor = Color(0xFFB7BACB)
 
 @Composable
 fun InputField(
@@ -58,7 +57,7 @@ fun InputField(
         fontFamily = JakartaSans,
         fontSize = 15.sp,
         fontWeight = FontWeight.Medium,
-        color = PlaceholderColor,
+        color = NetWorthTheme.extendedColors.placeholder,
     ),
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
