@@ -2,6 +2,7 @@ package com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import com.rosenstefanov.networthcalculator.core.common.CurrencyFormatter
 import com.rosenstefanov.networthcalculator.core.testing.MainDispatcherExtension
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetEffect
 import com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.models.EditAssetIntent
@@ -22,15 +23,50 @@ class EditAssetViewModelTest {
     @RegisterExtension
     val mainDispatcherExtension = MainDispatcherExtension(testDispatcher)
 
+    private fun viewModel() = EditAssetViewModel(CurrencyFormatter())
+
     @Test
-    fun `initial state is Content`() = runTest(testDispatcher) {
-        val viewModel = EditAssetViewModel()
-        assertThat(viewModel.uiState.value).isEqualTo(EditAssetUiState.Content)
+    fun `initial state is pre-filled Content`() = runTest(testDispatcher) {
+        val state = viewModel().uiState.value as EditAssetUiState.Content
+        assertThat(state.name).isEqualTo("Primary Residence")
+        assertThat(state.amount).isEqualTo("312,000")
+    }
+
+    @Test
+    fun `NameChanged updates the name`() = runTest(testDispatcher) {
+        val viewModel = viewModel()
+        viewModel.onIntent(EditAssetIntent.NameChanged("Lake House"))
+        assertThat((viewModel.uiState.value as EditAssetUiState.Content).name).isEqualTo("Lake House")
+    }
+
+    @Test
+    fun `AmountChanged formats the amount`() = runTest(testDispatcher) {
+        val viewModel = viewModel()
+        viewModel.onIntent(EditAssetIntent.AmountChanged("420000"))
+        assertThat((viewModel.uiState.value as EditAssetUiState.Content).amount).isEqualTo("420,000")
+    }
+
+    @Test
+    fun `DescriptionChanged updates the description`() = runTest(testDispatcher) {
+        val viewModel = viewModel()
+        viewModel.onIntent(EditAssetIntent.DescriptionChanged("Updated note"))
+        assertThat((viewModel.uiState.value as EditAssetUiState.Content).description).isEqualTo("Updated note")
+    }
+
+    @Test
+    fun `SaveClicked emits NavigateBack`() = runTest(testDispatcher) {
+        val viewModel = viewModel()
+        viewModel.effects.test {
+            viewModel.onIntent(EditAssetIntent.SaveClicked)
+            advanceUntilIdle()
+            assertThat(awaitItem()).isEqualTo(EditAssetEffect.NavigateBack)
+            cancelAndConsumeRemainingEvents()
+        }
     }
 
     @Test
     fun `CloseClicked emits NavigateBack`() = runTest(testDispatcher) {
-        val viewModel = EditAssetViewModel()
+        val viewModel = viewModel()
         viewModel.effects.test {
             viewModel.onIntent(EditAssetIntent.CloseClicked)
             advanceUntilIdle()

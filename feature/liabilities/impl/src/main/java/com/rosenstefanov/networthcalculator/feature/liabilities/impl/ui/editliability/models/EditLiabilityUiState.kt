@@ -2,5 +2,9 @@ package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.editlia
 
 sealed interface EditLiabilityUiState {
 
-    data object Content : EditLiabilityUiState
+    data class Content(
+        val name: String = "",
+        val amount: String = "",
+        val description: String = "",
+    ) : EditLiabilityUiState
 }

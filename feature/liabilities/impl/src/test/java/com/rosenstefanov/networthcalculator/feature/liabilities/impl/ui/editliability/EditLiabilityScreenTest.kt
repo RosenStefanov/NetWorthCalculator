@@ -1,6 +1,7 @@
 package com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.editliability
 
 import com.google.common.truth.Truth.assertThat
+import com.rosenstefanov.networthcalculator.core.common.CurrencyFormatter
 import com.rosenstefanov.networthcalculator.core.testing.ScreenSnapshotTest
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.feature.liabilities.impl.ui.editliability.models.EditLiabilityIntent
@@ -15,7 +16,7 @@ class EditLiabilityScreenTest : ScreenSnapshotTest() {
     @Test
     fun navigateBackEffect_invokesOnNavigateBack() {
         var navigatedBack = false
-        val viewModel = EditLiabilityViewModel()
+        val viewModel = EditLiabilityViewModel(CurrencyFormatter())
         composeTestRule.setContent {
             NetWorthCalculatorTheme {
                 EditLiabilityScreen(onNavigateBack = { navigatedBack = true }, viewModel = viewModel)

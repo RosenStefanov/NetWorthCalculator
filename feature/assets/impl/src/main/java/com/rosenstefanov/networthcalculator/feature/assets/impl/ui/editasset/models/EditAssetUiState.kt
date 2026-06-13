@@ -2,5 +2,9 @@ package com.rosenstefanov.networthcalculator.feature.assets.impl.ui.editasset.mo
 
 sealed interface EditAssetUiState {
 
-    data object Content : EditAssetUiState
+    data class Content(
+        val name: String = "",
+        val amount: String = "",
+        val description: String = "",
+    ) : EditAssetUiState
 }
