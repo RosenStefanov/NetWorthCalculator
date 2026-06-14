@@ -5,6 +5,7 @@ import com.rosenstefanov.networthcalculator.core.testing.ScreenSnapshotTest
 import com.rosenstefanov.networthcalculator.core.ui.models.HoldingType
 import com.rosenstefanov.networthcalculator.core.ui.theme.NetWorthCalculatorTheme
 import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.dashboard.models.DashboardIntent
+import com.rosenstefanov.networthcalculator.feature.dashboard.impl.ui.onboarding.WelcomeScreenPreview
 import org.junit.Test
 
 class DashboardScreenTest : ScreenSnapshotTest() {
@@ -20,6 +21,9 @@ class DashboardScreenTest : ScreenSnapshotTest() {
 
     @Test
     fun testDashboardErrorPreview() = captureSnapshot { DashboardErrorPreview() }
+
+    @Test
+    fun testWelcomeScreenPreview() = captureSnapshot { WelcomeScreenPreview() }
 
     // Route-level: a holding click routes to the matching detail screen by type.
     @Test

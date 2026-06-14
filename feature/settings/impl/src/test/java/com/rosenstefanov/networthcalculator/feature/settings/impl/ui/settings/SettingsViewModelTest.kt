@@ -48,10 +48,29 @@ class SettingsViewModelTest {
     }
 
     @Test
+    fun `CurrencyClicked shows the picker and CurrencySelected updates and hides it`() = runTest(testDispatcher) {
+        val viewModel = SettingsViewModel()
+        viewModel.onIntent(SettingsIntent.CurrencyClicked)
+        assertThat(viewModel.uiState.value.showCurrencyPicker).isTrue()
+
+        viewModel.onIntent(SettingsIntent.CurrencySelected("EUR"))
+        assertThat(viewModel.uiState.value.currency).isEqualTo("EUR")
+        assertThat(viewModel.uiState.value.showCurrencyPicker).isFalse()
+    }
+
+    @Test
+    fun `CurrencyPickerDismissed hides the picker without changing currency`() = runTest(testDispatcher) {
+        val viewModel = SettingsViewModel()
+        viewModel.onIntent(SettingsIntent.CurrencyClicked)
+        viewModel.onIntent(SettingsIntent.CurrencyPickerDismissed)
+        assertThat(viewModel.uiState.value.showCurrencyPicker).isFalse()
+        assertThat(viewModel.uiState.value.currency).isEqualTo("USD")
+    }
+
+    @Test
     fun `placeholder intents keep state unchanged`() = runTest(testDispatcher) {
         val viewModel = SettingsViewModel()
         val before = viewModel.uiState.value
-        viewModel.onIntent(SettingsIntent.CurrencyClicked)
         viewModel.onIntent(SettingsIntent.RateClicked)
         viewModel.onIntent(SettingsIntent.PrivacyClicked)
         assertThat(viewModel.uiState.value).isEqualTo(before)

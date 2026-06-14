@@ -104,7 +104,6 @@ internal fun SettingsScreen(
         ) {
             GroupLabel("Your name", topPadding = 8.dp)
             NameCard(value = uiState.name, onChange = { onIntent(SettingsIntent.NameChanged(it)) })
-            // (group labels below use the default 22dp top spacing)
 
             GroupLabel("Preferences")
             NetWorthSurfaceCard(cornerRadius = 18.dp, contentPadding = PaddingValues(0.dp)) {
@@ -150,6 +149,14 @@ internal fun SettingsScreen(
                     .padding(top = 26.dp),
             )
         }
+    }
+
+    if (uiState.showCurrencyPicker) {
+        CurrencyPickerSheet(
+            current = uiState.currency,
+            onSelect = { onIntent(SettingsIntent.CurrencySelected(it.code)) },
+            onDismiss = { onIntent(SettingsIntent.CurrencyPickerDismissed) },
+        )
     }
 }
 

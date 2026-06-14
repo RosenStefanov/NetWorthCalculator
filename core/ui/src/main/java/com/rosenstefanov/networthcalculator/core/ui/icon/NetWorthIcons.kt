@@ -4,9 +4,11 @@ import androidx.annotation.DrawableRes
 import com.rosenstefanov.networthcalculator.core.ui.R
 
 object NetWorthIcons {
+    @DrawableRes val ArrowRight = R.drawable.ic_arrow_right
     @DrawableRes val ArrowUpRight = R.drawable.ic_arrow_up_right
     @DrawableRes val AssetsCoins = R.drawable.ic_assets_coins
     @DrawableRes val Bell = R.drawable.ic_bell
+    @DrawableRes val Calculator = R.drawable.ic_calculator
     @DrawableRes val Car = R.drawable.ic_car
     @DrawableRes val Card = R.drawable.ic_card
     @DrawableRes val CaretDown = R.drawable.ic_caret_down
@@ -15,6 +17,7 @@ object NetWorthIcons {
     @DrawableRes val ChartUp = R.drawable.ic_chart_up
     @DrawableRes val ChevronDown = R.drawable.ic_chevron_down
     @DrawableRes val ChevronLeft = R.drawable.ic_chevron_left
+    @DrawableRes val Check = R.drawable.ic_check
     @DrawableRes val ChevronRight = R.drawable.ic_chevron_right
     @DrawableRes val Close = R.drawable.ic_close
     @DrawableRes val Dashboard = R.drawable.ic_dashboard
@@ -35,6 +38,7 @@ object NetWorthIcons {
     @DrawableRes val Plus = R.drawable.ic_plus
     @DrawableRes val Receipt = R.drawable.ic_receipt
     @DrawableRes val Scale = R.drawable.ic_scale
+    @DrawableRes val Search = R.drawable.ic_search
     @DrawableRes val SettingsGear = R.drawable.ic_settings_gear
     @DrawableRes val Star = R.drawable.ic_star
     @DrawableRes val Sun = R.drawable.ic_sun

@@ -67,6 +67,10 @@ internal val NegativeTintDark = Color(0x29E0457B) // 16%
 internal val DisabledFillLight = Color(0xFFDFE2EE)
 internal val DisabledFillDark = Color(0xFF262B47)
 
+// ---- Bottom-sheet grip handle ----
+internal val GripLight = Color(0xFFD7DAE8)
+internal val GripDark = Color(0x2EFFFFFF) // 18% white
+
 // ---- Light theme surfaces ----
 internal val LightBg = Color(0xFFEEF0F6)
 internal val LightSurface = Color(0xFFFFFFFF)

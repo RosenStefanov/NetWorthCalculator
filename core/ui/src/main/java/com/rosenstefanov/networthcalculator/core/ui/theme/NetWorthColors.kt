@@ -31,4 +31,7 @@ object NetWorthColors {
 
     // Card / chip elevation tint (used as a shadow spot color in light; dark uses 1px borders).
     val Shadow = Color(0xFF1E1646)
+
+    // Dialog / bottom-sheet scrim — rgba(12,15,36,.5), same in both themes.
+    val Scrim = Color(0x800C0F24)
 }

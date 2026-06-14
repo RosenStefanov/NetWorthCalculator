@@ -29,6 +29,7 @@ data class NetWorthExtendedColors(
     val lineSoft: Color,
     val negativeTint: Color,
     val disabledFill: Color,
+    val grip: Color,
 )
 
 internal val LightExtendedColors = NetWorthExtendedColors(
@@ -55,6 +56,7 @@ internal val LightExtendedColors = NetWorthExtendedColors(
     lineSoft = LineSoftLight,
     negativeTint = NegativeTintLight,
     disabledFill = DisabledFillLight,
+    grip = GripLight,
 )
 
 internal val DarkExtendedColors = NetWorthExtendedColors(
@@ -81,6 +83,7 @@ internal val DarkExtendedColors = NetWorthExtendedColors(
     lineSoft = LineSoftDark,
     negativeTint = NegativeTintDark,
     disabledFill = DisabledFillDark,
+    grip = GripDark,
 )
 
 val LocalNetWorthExtendedColors = staticCompositionLocalOf { LightExtendedColors }

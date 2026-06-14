@@ -51,7 +51,7 @@ class SettingsScreenTest : ScreenSnapshotTest() {
             }
         }
 
-        composeTestRule.onNodeWithText("Alex").performClick()
+        composeTestRule.onNodeWithText("Rosen").performClick()
         composeTestRule.onNodeWithContentDescription("Clear").performClick()
         composeTestRule.waitForIdle()
 
