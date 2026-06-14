@@ -42,7 +42,7 @@ class JacocoConventionPlugin : Plugin<Project> {
                 "**/*_HiltModules*.*",
                 "**/*_Factory.*",
                 "**/*_MembersInjector.*",
-                "**/*_Impl.*",
+                "**/*_Impl*.*",
                 "**/*Module_*.*",
                 "**/*Hilt_*.*",
                 "**/*_GeneratedInjector.*",
