@@ -19,7 +19,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor() : ViewModel() {
 
     // Pre-filled with placeholder preferences until the data layer is wired up.
-    private val _uiState = MutableStateFlow(SettingsUiState(name = "Alex"))
+    private val _uiState = MutableStateFlow(SettingsUiState(name = "Rosen"))
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
 
     private val _effects = Channel<SettingsEffect>(Channel.BUFFERED)
@@ -29,9 +29,11 @@ class SettingsViewModel @Inject constructor() : ViewModel() {
         when (intent) {
             is SettingsIntent.NameChanged -> _uiState.value = _uiState.value.copy(name = intent.name)
             is SettingsIntent.ThemeSelected -> _uiState.value = _uiState.value.copy(theme = intent.theme)
+            SettingsIntent.CurrencyClicked -> _uiState.value = _uiState.value.copy(showCurrencyPicker = true)
+            is SettingsIntent.CurrencySelected ->
+                _uiState.value = _uiState.value.copy(currency = intent.code, showCurrencyPicker = false)
+            SettingsIntent.CurrencyPickerDismissed -> _uiState.value = _uiState.value.copy(showCurrencyPicker = false)
             SettingsIntent.BackClicked -> viewModelScope.launch { _effects.send(SettingsEffect.NavigateBack) }
-            // No destinations yet — wired up when the currency picker / review / policy flows land.
-            SettingsIntent.CurrencyClicked -> Unit
             SettingsIntent.RateClicked -> Unit
             SettingsIntent.PrivacyClicked -> Unit
         }
